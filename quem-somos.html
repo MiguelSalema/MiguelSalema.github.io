@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Quem Somos - Ler+</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Arial', sans-serif;
+      background-color: #e3f2fd;
+      color: #0d47a1;
+    }
+
+    .topbar {
+      background-color: #0d47a1;
+      color: white;
+      padding: 1rem 0;
+      font-size: 1rem;
+      text-align: center;
+    }
+
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      border-bottom: 2px solid #0d47a1;
+      padding: 0.5rem 1rem;
+      flex-wrap: wrap;
+    }
+
+    .navbar img {
+      width: 180px;
+    }
+
+    .navbar nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .navbar nav a {
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      transition: color 0.3s;
+      position: relative;
+    }
+
+    .navbar nav a:hover {
+      color: #08306b;
+    }
+
+    .dropdown {
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+    }
+
+    .dropdown-content a {
+      color: #0d47a1;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #e3f2fd;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+
+    .promo-button {
+      background-color: #0d47a1;
+      color: white !important;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .promo-button:hover {
+      background-color: #08306b;
+    }
+
+    .quem-somos {
+      background-color: white;
+      padding: 3rem 2rem;
+      text-align: center;
+      margin: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+
+    .linha-tempo {
+      position: relative;
+      max-width: 1200px;
+      margin: 4rem auto;
+      padding: 2rem 0;
+    }
+
+    .linha-tempo::after {
+      content: '';
+      position: absolute;
+      width: 6px;
+      background-color: #0d47a1;
+      top: 0;
+      bottom: 0;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 0;
+    }
+
+    .evento {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin: 2rem 0;
+      position: relative;
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(50px);
+      transition: all 0.8s ease-out;
+    }
+
+    .evento.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .evento .imagem {
+      width: 45%;
+      display: flex;
+      justify-content: flex-end;
+      padding-right: 2rem;
+    }
+
+    .evento .imagem img {
+      width: 250px; /* AUMENTADO */
+      border-radius: 8px;
+    }
+
+    .evento .evento-content {
+      width: 45%;
+      background: white;
+      padding: 1rem;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      text-align: left;
+    }
+
+    @media (max-width: 768px) {
+      .evento {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .evento .imagem,
+      .evento .evento-content {
+        width: 100%;
+        padding: 0;
+      }
+
+      .linha-tempo::after {
+        left: 20px;
+        transform: none;
+      }
+    }
+
+    footer {
+      background-color: #0d47a1;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-left {
+      text-align: left;
+      font-size: 0.9rem;
+      max-width: 200px;
+    }
+
+    .footer-center {
+      text-align: center;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-logo img {
+      width: 150px;
+      margin-right: 15px;
+      height: auto;
+    }
+
+    .footer-logo h2 {
+      font-size: 5rem;
+      margin: 0;
+    }
+
+    .footer-button {
+      background-color: white;
+      color: #0d47a1;
+      padding: 1rem 1.75rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: background-color 0.3s;
+    }
+
+    .footer-button:hover {
+      background-color: #e3f2fd;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">
+    Rua Conde das Sardezas, 123 - São Paulo | (11) 98765-4321
+  </div>
+
+  <div class="navbar">
+    <img src="ler.png" alt="Logo Ler+">
+    <nav>
+      <a href="Livraria.html">Início</a>
+      <a href="quem-somos.html">Quem Somos</a>
+      <div class="dropdown">
+        <a href="#">Gêneros ▾</a>
+        <div class="dropdown-content">
+          <a href="#fantasia">Fantasia</a>
+          <a href="#classicos">Clássicos</a>
+          <a href="#brasileira">Literatura Brasileira</a>
+          <a href="#romance">Romance</a>
+        </div>
+      </div>
+      <a href="promocoes.html" class="promo-button">Promoções</a>
+    </nav>
+  </div>
+
+  <section class="quem-somos">
+    <h2>Quem Somos</h2>
+    <p>
+      A <strong>Ler+</strong> nasceu da paixão pelos livros e da vontade de democratizar o acesso à literatura.
+      Desde 1998, cultivamos um ambiente acolhedor para leitores de todas as idades e estilos. 
+      Somos movidos pela crença de que um livro pode mudar uma vida e conectar pessoas pelo poder das palavras.
+    </p>
+    <p>
+      Com eventos, feiras, presença online e muita dedicação, nossa missão é transformar o hábito da leitura em algo acessível e apaixonante para todos.
+    </p>
+  </section>
+
+  <section class="linha-tempo">
+    <div class="evento">
+      <div class="imagem"><img src="Screenshot 2025-05-06 at 20-31-09 Design sem nome - Post para Instagram.png" alt="Inauguração Ler+"></div>
+      <div class="evento-content">
+        <h3>1998</h3>
+        <p>Inauguração da primeira loja Ler+ em São Paulo.</p>
+      </div>
+    </div>
+    <div class="evento">
+      <div class="imagem"><img src="Screenshot 2025-05-06 at 21-05-24 Design sem nome - Post para Instagram.png" alt="Bienal do Livro"></div>
+      <div class="evento-content">
+        <h3>2006</h3>
+        <p>Participação na Bienal Internacional do Livro em São Paulo.</p>
+      </div>
+    </div>
+    <div class="evento">
+      <div class="imagem"><img src="Screenshot 2025-05-06 at 23-02-38 LER - Post para Instagram.png" alt="Loja Online Ler+"></div>
+      <div class="evento-content">
+        <h3>2016</h3>
+        <p>Criação da nossa loja online, levando literatura a todo o Brasil.</p>
+      </div>
+    </div>
+    <div class="evento">
+      <div class="imagem"><img src="Captura de tela 2025-05-06 230422.png" alt="Novo site Ler+"></div>
+      <div class="evento-content">
+        <h3>2025</h3>
+        <p>Revitalização completa do site, com novas experiências para leitores.</p>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-left">
+      <p>Rua Conde das Sardezas, 123<br>São Paulo, SP</p>
+      <p>(11) 98765-4321</p>
+    </div>
+    <div class="footer-center">
+      <div class="footer-logo">
+        <img src="ler-removebg-preview(2).png" alt="Logo Ler+" style="width: 350px; height: auto;">
+      </div>
+    </div>
+    <div class="footer-right">
+      <a href="promocoes.html" class="footer-button">Faça seu pedido!</a>
+    </div>
+  </footer>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('show');
+        }
+      });
+    }, {
+      threshold: 0.2
+    });
+
+    document.querySelectorAll('.evento').forEach(evento => {
+      observer.observe(evento);
+    });
+  </script>
+</body>
+</html>

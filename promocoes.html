@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Promoções - Ler+ Livraria</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #0d47a1;
+    }
+    .topbar {
+      background-color: #0d47a1;
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      border-bottom: 2px solid #0d47a1;
+      padding: 0.5rem 1rem;
+      flex-wrap: wrap;
+    }
+    .navbar img {
+      width: 180px;
+    }
+    .navbar nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .navbar nav a {
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      transition: 0.3s;
+    }
+    .navbar nav a:hover {
+      color: #08306b;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      border: 1px solid #0d47a1;
+      min-width: 160px;
+      z-index: 1;
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 0.5rem;
+      color: #0d47a1;
+      text-decoration: none;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .promo-button {
+      background-color: #0d47a1;
+      color: white !important;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .promo-container {
+      padding: 2rem;
+      max-width: 1200px;
+      margin: auto;
+    }
+    .promo-container h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+    }
+
+    .filter-bar {
+      display: flex;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      margin-bottom: 2rem;
+      gap: 1rem;
+    }
+
+    .filter-bar input, .filter-bar select {
+      padding: 0.5rem;
+      font-size: 1rem;
+      border: 1px solid #0d47a1;
+      border-radius: 5px;
+      flex: 1;
+      min-width: 220px;
+    }
+
+    .books-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 2rem;
+    }
+
+    .book-card {
+      text-align: center;
+      border: 1px solid #0d47a1;
+      border-radius: 10px;
+      padding: 1rem;
+      background-color: #f5faff;
+    }
+
+    .book-card img {
+      width: 150px;
+      height: 220px;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      border-radius: 5px;
+    }
+
+    footer {
+      background-color: #0d47a1;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      flex-wrap: wrap;
+    }
+    .footer-left, .footer-center, .footer-right {
+      flex: 1;
+      text-align: center;
+      margin: 0.5rem 0;
+    }
+    .footer-logo img {
+      width: 100px;
+    }
+    .footer-button {
+      background-color: white;
+      color: #0d47a1;
+      padding: 1rem 1.5rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      text-decoration: none;
+      font-size: 1.1rem;
+    }
+  </style>
+</head>
+<body>
+  <!-- Topbar -->
+  <div class="topbar">Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321</div>
+
+  <!-- Navbar -->
+  <div class="navbar">
+    <img src="ler.png" alt="Logo">
+    <nav>
+      <a href="Livraria.html">Início</a>
+      <a href="quem-somos.html">Quem Somos</a>
+      <div class="dropdown">
+        <a href="#">Gêneros</a>
+        <div class="dropdown-content">
+          <a href="#">Fantasia</a>
+          <a href="#">Romance</a>
+          <a href="#">Ficção</a>
+          <a href="#">Terror</a>
+        </div>
+      </div>
+      <a href="promocoes.html" class="promo-button">Promoções</a>
+    </nav>
+  </div>
+
+  <!-- Conteúdo -->
+  <section class="promo-container">
+    <h2>Livros em Promoção</h2>
+
+    <div class="filter-bar">
+      <input type="text" id="searchBar" placeholder="Pesquisar por título ou autor..." oninput="filterBooks()">
+      <select id="genreFilter" onchange="filterBooks()">
+        <option value="">Todos os Gêneros</option>
+        <option value="fantasia">Fantasia</option>
+        <option value="romance">Romance</option>
+        <option value="ficcao">Ficção</option>
+        <option value="terror">Terror</option>
+      </select>
+    </div>
+
+   <!-- Dentro da div books-grid -->
+<div class="books-grid" id="booksGrid">
+  <a href="livros/o-senhor-dos-aneis.html" class="book-card" data-genre="fantasia" data-title="O Senhor dos Anéis" data-author="J.R.R. Tolkien">
+    <img src="o-senhor-dos-aneis.png" alt="O Senhor dos Anéis">
+    <p><strong>O Senhor dos Anéis: Parte 1</strong><br>J.R.R. Tolkien<br>R$ 39,90</p>
+  </a>
+
+  <a href="livros/harry-potter.html" class="book-card" data-genre="fantasia" data-title="Harry Potter" data-author="J.K Rolling">
+    <img src="harry-potter.png" alt="Harry Potter">
+    <p><strong>Harry Potter e a Pedra Filosofal</strong><br>J.K Rolling<br>R$ 26,90</p>
+  </a>
+
+  <a href="livros/o-morro-dos-ventos-uivantes.html" class="book-card" data-genre="romance" data-title="O Morro dos Ventos Uivantes" data-author="Emily Brontë">
+    <img src="morrodosventos.png" alt="O Morro dos Ventos Uivantes">
+    <p><strong>O Morro dos Ventos Uivantes</strong><br>Emily Brontë<br>R$ 10,90</p>
+  </a>
+
+  <a href="livros/fahrenheit-451.html" class="book-card" data-genre="ficcao" data-title="Fahrenheit 451" data-author="Ray Bradbury">
+    <img src="fahrenheit.png" alt="Fahrenheit 451">
+    <p><strong>Fahrenheit 451</strong><br>Ray Bradbury<br>R$ 29,90</p>
+  </a>
+
+  <a href="livros/it-a-coisa.html" class="book-card" data-genre="terror" data-title="It: A Coisa" data-author="Stephen King">
+    <img src="it-acoisa.png" alt="It: A Coisa">
+    <p><strong>It: A Coisa</strong><br>Stephen King<br>R$ 42,90</p>
+  </a>
+
+  <a href="livros/o-iluminado.html" class="book-card" data-genre="terror" data-title="O Iluminado" data-author="Stephen King">
+    <img src="o-iluminado.png" alt="O Iluminado">
+    <p><strong>O Iluminado</strong><br>Stephen King<br>R$ 38,90</p>
+  </a>
+
+  <a href="livros/a-culpa-e-das-estrelas.html" class="book-card" data-genre="romance" data-title="A Culpa é das Estrelas" data-author="John Green">
+    <img src="a-culpa-e-das-estrelas.png" alt="A Culpa é das Estrelas">
+    <p><strong>A Culpa é das Estrelas</strong><br>John Green<br>R$ 33,90</p>
+  </a>
+
+  <a href="livros/duna.html" class="book-card" data-genre="ficcao" data-title="Duna" data-author="Frank Herbert">
+    <img src="duna.png" alt="Duna">
+    <p><strong>Duna</strong><br>Frank Herbert<br>R$ 45,90</p>
+  </a>
+
+  <a href="livros/eragon.html" class="book-card" data-genre="fantasia" data-title="Eragon" data-author="Christopher Paolini">
+    <img src="eragon.png" alt="Eragon">
+    <p><strong>Eragon</strong><br>Christopher Paolini<br>R$ 31,90</p>
+  </a>
+
+  <a href="livros/romeu-e-julieta.html" class="book-card" data-genre="romance" data-title="Romeu e Julieta" data-author="William Shakespeare">
+    <img src="romeu-e-julieta.png" alt="Romeu e Julieta">
+    <p><strong>Romeu e Julieta</strong><br>William Shakespeare<br>R$ 27,90</p>
+  </a>
+
+  <a href="livros/delilah-green.html" class="book-card" data-genre="romance" data-title="Delilah Green não está nem aí" data-author="Ashley Herning Blake">
+    <img src="delilah-green.png" alt="Delilah Green">
+    <p><strong>Delilah Green não está nem aí</strong><br>Ashley Herning Blake<br>R$ 30,90</p>
+  </a>
+
+  <a href="livros/rita-lee-autobiografia.html" class="book-card" data-genre="romance" data-title="Rita Lee: uma autobiografia" data-author="Rita Lee">
+    <img src="rita-lee.png" alt="Rita Lee - Biografia">
+    <p><strong>Rita Lee: uma autobiografia</strong><br>Rita Lee<br>R$ 34,90</p>
+  </a>
+</div>
+
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-left">
+      <p>Rua Conde das Sardezas, 123<br>São Paulo, SP</p>
+      <p>(11) 98765-4321</p>
+    </div>
+    <div class="footer-center">
+      <div class="footer-logo">
+        <img src="ler-removebg-preview(2).png" alt="Logo Ler+"style="width: 350px; height: auto;">
+      </div>
+    </div>
+    <div class="footer-right">
+      <a href="promocoes.html" class="footer-button">Faça seu pedido!</a>
+    </div>
+  </footer>
+
+  <script>
+    function filterBooks() {
+      const search = document.getElementById('searchBar').value.toLowerCase();
+      const genre = document.getElementById('genreFilter').value;
+      const books = document.querySelectorAll('.book-card');
+
+      books.forEach(book => {
+        const title = book.dataset.title.toLowerCase();
+        const author = book.dataset.author.toLowerCase();
+        const bookGenre = book.dataset.genre;
+        const matchGenre = genre === "" || bookGenre === genre;
+        const matchSearch = title.includes(search) || author.includes(search);
+        book.style.display = (matchGenre && matchSearch) ? "block" : "none";
+      });
+    }
+  </script>
+</body>
+</html>
