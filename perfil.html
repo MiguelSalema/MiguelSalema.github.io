@@ -1,0 +1,527 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Perfil do Usuário</title>
+  <link rel="stylesheet" href="estilo-compartilhado.css"> <!-- opcional para externalizar estilos comuns -->
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #0d47a1;
+    }
+    .topbar {
+      background-color: #0d47a1;
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      border-bottom: 2px solid #0d47a1;
+      padding: 1rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar img {
+      width: 180px;
+      transition: transform 0.3s;
+    }
+    .navbar img:hover {
+      transform: scale(1.05);
+    }
+    .navbar nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .navbar nav a {
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      transition: all 0.3s;
+      padding: 0.5rem;
+      position: relative;
+    }
+    .navbar nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #08306b;
+      transition: width 0.3s;
+    }
+    .navbar nav a:hover {
+      color: #08306b;
+    }
+    .navbar nav a:hover::after {
+      width: 100%;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease-out;
+    }
+    .dropdown-content a {
+      color: #0d47a1;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: all 0.2s;
+    }
+    .dropdown-content a:hover {
+      background-color: #e3f2fd;
+      padding-left: 20px;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .promo-button {
+      background-color: #0d47a1;
+      color: white !important;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .promo-button:hover {
+      background-color: #08306b;
+      transform: translateY(-2px);
+    }
+    .cart-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+    .cart-icon:hover {
+      transform: scale(1.2);
+    }
+    .menu-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #0d47a1;
+      margin-left: 1rem;
+      transition: transform 0.3s;
+    }
+    .menu-icon:hover {
+      transform: scale(1.2);
+    }
+
+    .sidebar {
+        position: fixed;
+        top: 0;
+        right: -300px;
+        width: 260px;
+        height: 100%;
+        background-color: white;
+        box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+        padding: 1.5rem;
+        box-sizing: border-box;
+        z-index: 999;
+        transition: right 0.3s ease-in-out;
+    }
+
+    .sidebar.open {
+        right: 0;
+    }
+
+    .sidebar-header {
+        text-align: center;
+        margin-bottom: 2rem;
+    }
+
+    .sidebar-header img {
+        width: 80px;
+        height: 80px;
+        border-radius: 50%;
+        object-fit: cover;
+        margin-bottom: 0.5rem;
+    }
+
+    .sidebar a, .sidebar button {
+        display: block;
+        width: 100%;
+        text-align: left;
+        padding: 0.75rem 0;
+        text-decoration: none;
+        color: #0d47a1;
+        font-weight: bold;
+        border: none;
+        background: none;
+        cursor: pointer;
+        border-bottom: 1px solid #ccc;
+    }
+
+    .sidebar button:hover, .sidebar a:hover {
+        background-color: #e3f2fd;
+    }
+
+    .perfil-container {
+      display: flex;
+      flex-direction: row;
+      gap: 2rem;
+      padding: 2rem;
+      align-items: center;
+      max-width: 900px;
+      margin: auto;
+    }
+
+    .foto-perfil {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .foto-perfil img {
+      width: 150px;
+      height: 150px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid #0d47a1;
+    }
+
+    .info-perfil {
+      flex: 1;
+    }
+
+    .info-perfil h2 {
+      margin-top: 0;
+      color: #0d47a1;
+    }
+
+    .acoes-perfil {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .acoes-perfil a, .acoes-perfil button {
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      padding: 0.75rem 1rem;
+      border-radius: 5px;
+      text-decoration: none;
+      text-align: center;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .acoes-perfil a:hover, .acoes-perfil button:hover {
+      background-color: #08306b;
+    }
+    footer {
+      background-color: #0d47a1;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-left {
+      text-align: left;
+      font-size: 0.9rem;
+      max-width: 200px;
+    }
+
+    .footer-center {
+      text-align: center;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-logo img {
+      width: 150px;
+      margin-right: 15px;
+      height: auto;
+    }
+
+    .footer-logo h2 {
+      font-size: 5rem;
+      margin: 0;
+    }
+
+    .footer-button {
+      background-color: white;
+      color: #0d47a1;
+      padding: 1rem 1.75rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: background-color 0.3s;
+    }
+
+    .footer-button:hover {
+      background-color: #e3f2fd;
+    }
+    footer {
+      background-color: #0d47a1;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .footer-left {
+      text-align: left;
+      font-size: 0.9rem;
+      max-width: 200px;
+    }
+
+    .footer-center {
+      text-align: center;
+    }
+
+    .footer-right {
+      text-align: right;
+    }
+
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-logo img {
+      width: 150px;
+      margin-right: 15px;
+      height: auto;
+    }
+
+    .footer-logo h2 {
+      font-size: 5rem;
+      margin: 0;
+    }
+
+    .footer-button {
+      background-color: white;
+      color: #0d47a1;
+      padding: 1rem 1.75rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: background-color 0.3s;
+    }
+
+    .footer-button:hover {
+      background-color: #e3f2fd;
+    }
+  </style>
+</head>
+<script>
+  document.addEventListener("DOMContentLoaded", function () {
+    const nav = document.querySelector(".navbar nav");
+    const menuButton = document.createElement("button");
+    menuButton.className = "menu-icon";
+    menuButton.innerHTML = "☰";
+    menuButton.onclick = function () {
+      document.getElementById("sidebar").classList.toggle("open");
+    };
+    nav.appendChild(menuButton);
+  });
+</script>
+  
+<body>
+    <div class="topbar">Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321</div>
+  
+    <div class="navbar">
+      <a href="index.html">
+        <img src="ler.png" alt="Logo Ler+">
+      </a>
+      <nav>
+        <a href="index.html">Início</a>
+        <a href="quem-somos.html">Quem Somos</a>
+        <div class="dropdown">
+          <a href="#">Gêneros ▾</a>
+          <div class="dropdown-content">
+            <a href="#">Fantasia</a>
+            <a href="#">Romance</a>
+            <a href="#">Ficção</a>
+            <a href="#">Terror</a>
+          </div>
+        </div>
+        <a href="promocoes.html" class="promo-button">Promoções</a>
+        <a href="carrinho.html" class="cart-icon">🛒</a>
+        <button class="menu-icon">☰</button>
+      </nav>
+    </div>
+  
+    <!-- === SIDEBAR IGUAL À DE promocoes.html === -->
+    <div class="sidebar" id="sidebar">
+      <div class="sidebar-header" id="sidebar-header">
+        <!-- Conteúdo será preenchido por JS -->
+      </div>
+      <div id="sidebar-links">
+        <!-- Conteúdo será preenchido por JS -->
+      </div>
+    </div>
+  
+            <div style="margin-top: 2rem;">
+              <button onclick="logout()">Sair</button>
+            </div>
+          </div>
+          
+        </nav>
+      </div>
+  
+  <!-- Conteúdo do perfil -->
+  <main>
+    <div class="perfil-container">
+      <div class="foto-perfil">
+        <img id="preview" src="usuario.jpg" alt="">
+        <input type="file" id="upload" accept="image/*" style="display: none;">
+        <button onclick="document.getElementById('upload').click()">Alterar Foto</button>
+      </div>
+      <div class="info-perfil">
+        <h2>Nome do Usuário</h2>
+        <div class="acoes-perfil">
+          <a href="pedidos.html">Pedidos</a>
+          <a href="editar-informacoes.html">Editar Informações Pessoais</a>
+          <a href="editar-endereco.html">Editar Endereço</a>
+          <a href="alterar-senha.html">Alterar Senha</a>
+          <button onclick="window.location.href='sair.html'">Desconectar</button>
+        </div>
+      </div>
+    </div>
+  </main>
+  
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-left">
+      <p>Rua Conde de Sardezas, 123 - São Paulo</p>
+      <p>Telefone: (11) 98765-4321</p>
+    </div>
+    <div class="footer-center">
+      <div class="footer-logo">
+        <img src="Logo Branca.png" alt="Logo Ler+" style="width: 350px; height: auto;">
+      </div>
+    </div>
+    <div class="footer-right">
+      <a href="promocoes.html" class="footer-button">Faça seu pedido!</a>
+    </div>
+  </footer>
+  <script>
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+  
+    document.addEventListener("DOMContentLoaded", function () {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      const logoutBtn = document.querySelector(".sidebar button[onclick='logout()']");
+  
+      if (user) {
+        header.innerHTML = `
+          <img src="${user.foto}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="pedidos.html">Pedidos</a>
+          <a href="#">Aba1</a>
+          <a href="#">Aba2</a>
+          <a href="#">Aba3</a>
+          <a href="#">Aba4</a>
+          <a href="#">Aba5</a>
+        `;
+      } else {
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+        if (logoutBtn) logoutBtn.style.display = "none";
+      }
+    });
+    // === [COLE AQUI O JAVASCRIPT DE CONTROLE DO SIDEBAR DE promocoes.html] ===
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      
+      if (user) {
+        header.innerHTML = `
+          <img src="${user.foto || 'user-default.png'}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="perfil.html">Meu Perfil</a>
+          <a href="pedidos.html">Meus Pedidos</a>
+          <a href="favoritos.html">Favoritos</a>
+          <button onclick="logout()">Sair</button>
+        `;
+      } else {
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+      }
+    });
+
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!sidebar.contains(event.target) && event.target !== menuIcon) {
+        sidebar.classList.remove('open');
+      }
+    });
+    // === [FIM DO JAVASCRIPT] ===
+  </script>
+  
+</body>
+</html>

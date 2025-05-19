@@ -1,8 +1,8 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Promoções - Ler+ Livraria</title>
   <style>
     body {
@@ -16,18 +16,28 @@
       color: white;
       padding: 1rem 0;
       text-align: center;
+      font-size: 0.9rem;
     }
+    
+    /* Navbar atualizada */
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background-color: white;
       border-bottom: 2px solid #0d47a1;
-      padding: 0.5rem 1rem;
+      padding: 1rem;
       flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .navbar img {
       width: 180px;
+      transition: transform 0.3s;
+    }
+    .navbar img:hover {
+      transform: scale(1.05);
     }
     .navbar nav {
       display: flex;
@@ -38,10 +48,25 @@
       text-decoration: none;
       color: #0d47a1;
       font-weight: bold;
-      transition: 0.3s;
+      transition: all 0.3s;
+      padding: 0.5rem;
+      position: relative;
+    }
+    .navbar nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #08306b;
+      transition: width 0.3s;
     }
     .navbar nav a:hover {
       color: #08306b;
+    }
+    .navbar nav a:hover::after {
+      width: 100%;
     }
     .dropdown {
       position: relative;
@@ -50,18 +75,28 @@
       display: none;
       position: absolute;
       background-color: white;
-      border: 1px solid #0d47a1;
       min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
       z-index: 1;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease-out;
     }
     .dropdown-content a {
       display: block;
       padding: 0.5rem;
       color: #0d47a1;
       text-decoration: none;
+      transition: all 0.2s;
+    }
+    .dropdown-content a:hover {
+      background-color: #e3f2fd;
+      padding-left: 20px;
     }
     .dropdown:hover .dropdown-content {
       display: block;
+      opacity: 1;
+      transform: translateY(0);
     }
     .promo-button {
       background-color: #0d47a1;
@@ -69,9 +104,33 @@
       padding: 0.4rem 0.8rem;
       border-radius: 5px;
       text-decoration: none;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
     }
-
+    .promo-button:hover {
+      background-color: #08306b;
+      transform: translateY(-2px);
+    }
+    .cart-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+    .cart-icon:hover {
+      transform: scale(1.2);
+    }
+    .menu-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #0d47a1;
+      margin-left: 1rem;
+      transition: transform 0.3s;
+    }
+    .menu-icon:hover {
+      transform: scale(1.2);
+    }
+    
+    /* Restante do CSS original (sem alterações) */
     .promo-container {
       padding: 2rem;
       max-width: 1200px;
@@ -80,8 +139,9 @@
     .promo-container h2 {
       text-align: center;
       margin-bottom: 1.5rem;
+      color: #0d47a1;
+      font-size: 2rem;
     }
-
     .filter-bar {
       display: flex;
       justify-content: space-between;
@@ -89,8 +149,8 @@
       margin-bottom: 2rem;
       gap: 1rem;
     }
-
-    .filter-bar input, .filter-bar select {
+    .filter-bar input, 
+    .filter-bar select {
       padding: 0.5rem;
       font-size: 1rem;
       border: 1px solid #0d47a1;
@@ -98,21 +158,23 @@
       flex: 1;
       min-width: 220px;
     }
-
     .books-grid {
       display: grid;
       grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
       gap: 2rem;
     }
-
     .book-card {
       text-align: center;
       border: 1px solid #0d47a1;
       border-radius: 10px;
       padding: 1rem;
       background-color: #f5faff;
+      transition: transform 0.3s, box-shadow 0.3s;
     }
-
+    .book-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 5px 15px rgba(13, 71, 161, 0.2);
+    }
     .book-card img {
       width: 150px;
       height: 220px;
@@ -120,7 +182,12 @@
       margin-bottom: 0.5rem;
       border-radius: 5px;
     }
-
+    .book-card p {
+      margin: 0.5rem 0;
+    }
+    .book-card strong {
+      color: #0d47a1;
+    }
     footer {
       background-color: #0d47a1;
       color: white;
@@ -130,13 +197,17 @@
       padding: 2rem;
       flex-wrap: wrap;
     }
-    .footer-left, .footer-center, .footer-right {
+    .footer-left, 
+    .footer-center, 
+    .footer-right {
       flex: 1;
       text-align: center;
       margin: 0.5rem 0;
+      min-width: 200px;
     }
     .footer-logo img {
-      width: 100px;
+      width: 350px;
+      height: auto;
     }
     .footer-button {
       background-color: white;
@@ -147,21 +218,107 @@
       font-weight: bold;
       text-decoration: none;
       font-size: 1.1rem;
+      transition: background-color 0.3s;
+    }
+    .footer-button:hover {
+      background-color: #e3f2fd;
+    }
+    /* Sidebar Styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 260px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+      padding: 1.5rem;
+      box-sizing: border-box;
+      z-index: 999;
+      transition: right 0.3s ease-in-out;
+    }
+    .sidebar.open {
+      right: 0;
+    }
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .sidebar-header img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      border: 2px solid #0d47a1;
+    }
+    .sidebar-header div {
+      font-size: 1.2rem;
+      color: #0d47a1;
+    }
+    .sidebar a, 
+    .sidebar button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 1px solid #ccc;
+    }
+    .sidebar button:hover, 
+    .sidebar a:hover {
+      background-color: #e3f2fd;
+    }
+    @media (max-width: 768px) {
+      .navbar nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      .filter-bar {
+        flex-direction: column;
+      }
+    }
+    #noResultsMessage {
+      background-color: #f8f9fa;
+      border-radius: 8px;
+      margin: 1rem 0;
+    }
+    #noResultsMessage p {
+      font-size: 1.2rem;
+      color: #0d47a1;
+      margin-bottom: 1rem;
+    }
+    #noResultsMessage button {
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      padding: 0.5rem 1rem;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+    #noResultsMessage button:hover {
+      background-color: #08306b;
     }
   </style>
 </head>
 <body>
-  <!-- Topbar -->
   <div class="topbar">Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321</div>
-
-  <!-- Navbar -->
+  
   <div class="navbar">
-    <img src="ler.png" alt="Logo">
+    <a href="index.html">
+      <img src="ler.png" alt="Logo Ler+">
+    </a>
     <nav>
       <a href="index.html">Início</a>
       <a href="quem-somos.html">Quem Somos</a>
       <div class="dropdown">
-        <a href="#">Gêneros</a>
+        <a href="#">Gêneros ▾</a>
         <div class="dropdown-content">
           <a href="#">Fantasia</a>
           <a href="#">Romance</a>
@@ -170,10 +327,20 @@
         </div>
       </div>
       <a href="promocoes.html" class="promo-button">Promoções</a>
+      <a href="carrinho.html" class="cart-icon">🛒</a>
+      <button class="menu-icon">☰</button>
     </nav>
   </div>
 
-  <!-- Conteúdo -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header" id="sidebar-header">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+    <div id="sidebar-links">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+  </div>
+
   <section class="promo-container">
     <h2>Livros em Promoção</h2>
 
@@ -187,73 +354,99 @@
         <option value="terror">Terror</option>
       </select>
     </div>
+    <div id="noResultsMessage" style="display: none; text-align: center; padding: 2rem; grid-column: 1 / -1;">
+      <p style="font-size: 1.2rem; color: #0d47a1;">Nenhum livro encontrado com o termo pesquisado.</p>
+      <button onclick="resetSearch()" style="margin-top: 1rem; padding: 0.5rem 1rem; background-color: #0d47a1; color: white; border: none; border-radius: 5px; cursor: pointer;">
+        Limpar pesquisa
+      </button>
+    </div>
+    <div class="books-grid" id="booksGrid">
+      <a href="osenhordosaneis.html" class="book-card" data-genre="fantasia" data-title="O Senhor dos Anéis" data-author="J.R.R. Tolkien">
+        <img src="o-senhor-dos-aneis.png" alt="O Senhor dos Anéis">
+        <p><strong>O Senhor dos Anéis: Parte 1</strong></p>
+        <p>J.R.R. Tolkien</p>
+        <p>R$ 39,90</p>
+      </a>
 
-   <!-- Dentro da div books-grid -->
-<div class="books-grid" id="booksGrid">
-  <a href="livros/o-senhor-dos-aneis.html" class="book-card" data-genre="fantasia" data-title="O Senhor dos Anéis" data-author="J.R.R. Tolkien">
-    <img src="o-senhor-dos-aneis.png" alt="O Senhor dos Anéis">
-    <p><strong>O Senhor dos Anéis: Parte 1</strong><br>J.R.R. Tolkien<br>R$ 39,90</p>
-  </a>
+      <a href="harrypotter.html" class="book-card" data-genre="fantasia" data-title="Harry Potter" data-author="J.K. Rowling">
+        <img src="harry-potter.png" alt="Harry Potter">
+        <p><strong>Harry Potter e a Pedra Filosofal</strong></p>
+        <p>J.K. Rowling</p>
+        <p>R$ 26,90</p>
+      </a>
 
-  <a href="livros/harry-potter.html" class="book-card" data-genre="fantasia" data-title="Harry Potter" data-author="J.K Rolling">
-    <img src="harry-potter.png" alt="Harry Potter">
-    <p><strong>Harry Potter e a Pedra Filosofal</strong><br>J.K Rolling<br>R$ 26,90</p>
-  </a>
+      <a href="omorrodosventosuivantes.html" class="book-card" data-genre="romance" data-title="O Morro dos Ventos Uivantes" data-author="Emily Brontë">
+        <img src="morrodosventos.png" alt="O Morro dos Ventos Uivantes">
+        <p><strong>O Morro dos Ventos Uivantes</strong></p>
+        <p>Emily Brontë</p>
+        <p>R$ 10,90</p>
+      </a>
 
-  <a href="livros/o-morro-dos-ventos-uivantes.html" class="book-card" data-genre="romance" data-title="O Morro dos Ventos Uivantes" data-author="Emily Brontë">
-    <img src="morrodosventos.png" alt="O Morro dos Ventos Uivantes">
-    <p><strong>O Morro dos Ventos Uivantes</strong><br>Emily Brontë<br>R$ 10,90</p>
-  </a>
+      <a href="fahrenheit451.html" class="book-card" data-genre="ficcao" data-title="Fahrenheit 451" data-author="Ray Bradbury">
+        <img src="fahrenheit.png" alt="Fahrenheit 451">
+        <p><strong>Fahrenheit 451</strong></p>
+        <p>Ray Bradbury</p>
+        <p>R$ 29,90</p>
+      </a>
 
-  <a href="livros/fahrenheit-451.html" class="book-card" data-genre="ficcao" data-title="Fahrenheit 451" data-author="Ray Bradbury">
-    <img src="fahrenheit.png" alt="Fahrenheit 451">
-    <p><strong>Fahrenheit 451</strong><br>Ray Bradbury<br>R$ 29,90</p>
-  </a>
+      <a href="itacoisa.html" class="book-card" data-genre="terror" data-title="It: A Coisa" data-author="Stephen King">
+        <img src="it-acoisa.png" alt="It: A Coisa">
+        <p><strong>It: A Coisa</strong></p>
+        <p>Stephen King</p>
+        <p>R$ 59,90</p>
+      </a>
 
-  <a href="livros/it-a-coisa.html" class="book-card" data-genre="terror" data-title="It: A Coisa" data-author="Stephen King">
-    <img src="it-acoisa.png" alt="It: A Coisa">
-    <p><strong>It: A Coisa</strong><br>Stephen King<br>R$ 42,90</p>
-  </a>
+      <a href="oiluminado.html" class="book-card" data-genre="terror" data-title="O Iluminado" data-author="Stephen King">
+        <img src="o-iluminado.png" alt="O Iluminado">
+        <p><strong>O Iluminado</strong></p>
+        <p>Stephen King</p>
+        <p>R$ 38,90</p>
+      </a>
 
-  <a href="livros/o-iluminado.html" class="book-card" data-genre="terror" data-title="O Iluminado" data-author="Stephen King">
-    <img src="o-iluminado.png" alt="O Iluminado">
-    <p><strong>O Iluminado</strong><br>Stephen King<br>R$ 38,90</p>
-  </a>
+      <a href="aculpaedasestrelas.html" class="book-card" data-genre="romance" data-title="A Culpa é das Estrelas" data-author="John Green">
+        <img src="a-culpa-e-das-estrelas.png" alt="A Culpa é das Estrelas">
+        <p><strong>A Culpa é das Estrelas</strong></p>
+        <p>John Green</p>
+        <p>R$ 33,90</p>
+      </a>
 
-  <a href="livros/a-culpa-e-das-estrelas.html" class="book-card" data-genre="romance" data-title="A Culpa é das Estrelas" data-author="John Green">
-    <img src="a-culpa-e-das-estrelas.png" alt="A Culpa é das Estrelas">
-    <p><strong>A Culpa é das Estrelas</strong><br>John Green<br>R$ 33,90</p>
-  </a>
+      <a href="duna.html" class="book-card" data-genre="ficcao" data-title="Duna" data-author="Frank Herbert">
+        <img src="duna.png" alt="Duna">
+        <p><strong>Duna</strong></p>
+        <p>Frank Herbert</p>
+        <p>R$ 45,90</p>
+      </a>
 
-  <a href="livros/duna.html" class="book-card" data-genre="ficcao" data-title="Duna" data-author="Frank Herbert">
-    <img src="duna.png" alt="Duna">
-    <p><strong>Duna</strong><br>Frank Herbert<br>R$ 45,90</p>
-  </a>
+      <a href="eragon.html" class="book-card" data-genre="fantasia" data-title="Eragon" data-author="Christopher Paolini">
+        <img src="eragon.png" alt="Eragon">
+        <p><strong>Eragon</strong></p>
+        <p>Christopher Paolini</p>
+        <p>R$ 31,90</p>
+      </a>
 
-  <a href="livros/eragon.html" class="book-card" data-genre="fantasia" data-title="Eragon" data-author="Christopher Paolini">
-    <img src="eragon.png" alt="Eragon">
-    <p><strong>Eragon</strong><br>Christopher Paolini<br>R$ 31,90</p>
-  </a>
+      <a href="livros/romeu-e-julieta.html" class="book-card" data-genre="romance" data-title="Romeu e Julieta" data-author="William Shakespeare">
+        <img src="romeu-e-julieta.png" alt="Romeu e Julieta">
+        <p><strong>Romeu e Julieta</strong></p>
+        <p>William Shakespeare</p>
+        <p>R$ 27,90</p>
+      </a>
 
-  <a href="livros/romeu-e-julieta.html" class="book-card" data-genre="romance" data-title="Romeu e Julieta" data-author="William Shakespeare">
-    <img src="romeu-e-julieta.png" alt="Romeu e Julieta">
-    <p><strong>Romeu e Julieta</strong><br>William Shakespeare<br>R$ 27,90</p>
-  </a>
+      <a href="livros/delilah-green.html" class="book-card" data-genre="romance" data-title="Delilah Green não está nem aí" data-author="Ashley Herning Blake">
+        <img src="delilah-green.png" alt="Delilah Green">
+        <p><strong>Delilah Green não está nem aí</strong></p>
+        <p>Ashley Herning Blake</p>
+        <p>R$ 30,90</p>
+      </a>
 
-  <a href="livros/delilah-green.html" class="book-card" data-genre="romance" data-title="Delilah Green não está nem aí" data-author="Ashley Herning Blake">
-    <img src="delilah-green.png" alt="Delilah Green">
-    <p><strong>Delilah Green não está nem aí</strong><br>Ashley Herning Blake<br>R$ 30,90</p>
-  </a>
-
-  <a href="livros/rita-lee-autobiografia.html" class="book-card" data-genre="romance" data-title="Rita Lee: uma autobiografia" data-author="Rita Lee">
-    <img src="rita-lee.png" alt="Rita Lee - Biografia">
-    <p><strong>Rita Lee: uma autobiografia</strong><br>Rita Lee<br>R$ 34,90</p>
-  </a>
-</div>
-
+      <a href="livros/rita-lee-autobiografia.html" class="book-card" data-genre="romance" data-title="Rita Lee: uma autobiografia" data-author="Rita Lee">
+        <img src="rita-lee.png" alt="Rita Lee - Biografia">
+        <p><strong>Rita Lee: uma autobiografia</strong></p>
+        <p>Rita Lee</p>
+        <p>R$ 34,90</p>
+      </a>
+    </div>
   </section>
 
-  <!-- Footer -->
   <footer>
     <div class="footer-left">
       <p>Rua Conde das Sardezas, 123<br>São Paulo, SP</p>
@@ -261,7 +454,7 @@
     </div>
     <div class="footer-center">
       <div class="footer-logo">
-        <img src="ler-removebg-preview(2).png" alt="Logo Ler+"style="width: 350px; height: auto;">
+        <img src="Logo Branca.png" alt="Logo Ler+">
       </div>
     </div>
     <div class="footer-right">
@@ -270,10 +463,14 @@
   </footer>
 
   <script>
+    // Função para filtrar os livros
     function filterBooks() {
       const search = document.getElementById('searchBar').value.toLowerCase();
       const genre = document.getElementById('genreFilter').value;
       const books = document.querySelectorAll('.book-card');
+      const noResultsMessage = document.getElementById('noResultsMessage');
+      
+      let hasVisibleBooks = false;
 
       books.forEach(book => {
         const title = book.dataset.title.toLowerCase();
@@ -281,9 +478,69 @@
         const bookGenre = book.dataset.genre;
         const matchGenre = genre === "" || bookGenre === genre;
         const matchSearch = title.includes(search) || author.includes(search);
-        book.style.display = (matchGenre && matchSearch) ? "block" : "none";
+        
+        if (matchGenre && matchSearch) {
+          book.style.display = "block";
+          hasVisibleBooks = true;
+        } else {
+          book.style.display = "none";
+        }
       });
+
+      // Mostra ou esconde a mensagem de nenhum resultado
+      noResultsMessage.style.display = hasVisibleBooks ? "none" : "block";
     }
+
+    // Função para limpar a pesquisa
+    function resetSearch() {
+      document.getElementById('searchBar').value = "";
+      document.getElementById('genreFilter').value = "";
+      filterBooks();
+    }
+
+    // Sidebar functionality
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      
+      if (user) {
+        header.innerHTML = `
+          <img src="${user.foto || 'user-default.png'}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="perfil.html">Meu Perfil</a>
+          <a href="pedidos.html">Meus Pedidos</a>
+          <a href="favoritos.html">Favoritos</a>
+          <button onclick="logout()">Sair</button>
+        `;
+      } else {
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+      }
+    });
+
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!sidebar.contains(event.target) && event.target !== menuIcon) {
+        sidebar.classList.remove('open');
+      }
+    });
   </script>
 </body>
 </html>

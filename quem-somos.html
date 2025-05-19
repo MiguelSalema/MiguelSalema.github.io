@@ -2,60 +2,73 @@
 <html lang="pt-br">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Quem Somos - Ler+</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quem Somos - Ler+ Livraria</title>
   <style>
     body {
       margin: 0;
-      font-family: 'Arial', sans-serif;
-      background-color: #e3f2fd;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
       color: #0d47a1;
     }
-
     .topbar {
       background-color: #0d47a1;
       color: white;
       padding: 1rem 0;
-      font-size: 1rem;
       text-align: center;
+      font-size: 0.9rem;
     }
-
     .navbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
       background-color: white;
       border-bottom: 2px solid #0d47a1;
-      padding: 0.5rem 1rem;
+      padding: 1rem;
       flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
-
     .navbar img {
       width: 180px;
+      transition: transform 0.3s;
     }
-
+    .navbar img:hover {
+      transform: scale(1.05);
+    }
     .navbar nav {
       display: flex;
       gap: 1rem;
       align-items: center;
     }
-
     .navbar nav a {
       text-decoration: none;
       color: #0d47a1;
       font-weight: bold;
-      transition: color 0.3s;
+      transition: all 0.3s;
+      padding: 0.5rem;
       position: relative;
     }
-
+    .navbar nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #08306b;
+      transition: width 0.3s;
+    }
     .navbar nav a:hover {
       color: #08306b;
     }
-
+    .navbar nav a:hover::after {
+      width: 100%;
+    }
     .dropdown {
       position: relative;
     }
-
     .dropdown-content {
       display: none;
       position: absolute;
@@ -63,43 +76,90 @@
       min-width: 160px;
       box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
       z-index: 1;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease-out;
     }
-
     .dropdown-content a {
       color: #0d47a1;
       padding: 12px 16px;
       text-decoration: none;
       display: block;
+      transition: all 0.2s;
     }
-
     .dropdown-content a:hover {
       background-color: #e3f2fd;
+      padding-left: 20px;
     }
-
     .dropdown:hover .dropdown-content {
       display: block;
+      opacity: 1;
+      transform: translateY(0);
     }
-
     .promo-button {
       background-color: #0d47a1;
       color: white !important;
       padding: 0.4rem 0.8rem;
       border-radius: 5px;
       text-decoration: none;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
     }
-
     .promo-button:hover {
       background-color: #08306b;
+      transform: translateY(-2px);
     }
-
+    .cart-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+    }
+    .cart-icon:hover {
+      transform: scale(1.2);
+    }
+    .menu-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #0d47a1;
+      margin-left: 1rem;
+      transition: transform 0.3s;
+    }
+    .menu-icon:hover {
+      transform: scale(1.2);
+    }
     .quem-somos {
       background-color: white;
       padding: 3rem 2rem;
       text-align: center;
-      margin: 2rem;
+      margin: 2rem auto;
+      max-width: 800px;
       border-radius: 10px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+      position: relative;
+      overflow: hidden;
+    }
+    
+    .quem-somos::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 5px;
+      background: linear-gradient(90deg, #0d47a1, #1976d2, #0d47a1);
+    }
+
+    .quem-somos h2 {
+      color: #0d47a1;
+      font-size: 2.5rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      display: inline-block;
+    }
+    .quem-somos p {
+      font-size: 1.1rem;
+      line-height: 1.6;
+      margin-bottom: 1.5rem;
     }
 
     .linha-tempo {
@@ -113,24 +173,26 @@
       content: '';
       position: absolute;
       width: 6px;
-      background-color: #0d47a1;
+      background: linear-gradient(to bottom, #0d47a1, #1976d2);
       top: 0;
       bottom: 0;
       left: 50%;
       transform: translateX(-50%);
       z-index: 0;
+      border-radius: 3px;
     }
 
     .evento {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin: 2rem 0;
+      margin: 3rem 0;
       position: relative;
       z-index: 1;
       opacity: 0;
       transform: translateY(50px);
       transition: all 0.8s ease-out;
+      padding: 1rem;
     }
 
     .evento.show {
@@ -141,41 +203,65 @@
     .evento .imagem {
       width: 45%;
       display: flex;
-      justify-content: flex-end;
+      justify-content: center;
       padding-right: 2rem;
     }
 
     .evento .imagem img {
-      width: 250px; /* AUMENTADO */
+      width: 280px;
+      height: 200px;
+      object-fit: cover;
       border-radius: 8px;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    
+    .evento .imagem img:hover {
+      transform: scale(1.03);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.3);
     }
 
     .evento .evento-content {
       width: 45%;
       background: white;
-      padding: 1rem;
+      padding: 1.5rem;
       border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
       text-align: left;
+      transition: all 0.3s;
+      border-left: 4px solid #0d47a1;
+      position: relative;
+    }
+    
+    .evento .evento-content::before {
+      content: '';
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      background-color: #0d47a1;
+      border-radius: 50%;
+      top: 50%;
+      left: -12px;
+      transform: translateY(-50%);
+      z-index: 2;
+      border: 3px solid white;
+    }
+    
+    .evento .evento-content:hover {
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
     }
 
-    @media (max-width: 768px) {
-      .evento {
-        flex-direction: column;
-        align-items: center;
-        text-align: center;
-      }
+    .evento .evento-content h3 {
+      color: #0d47a1;
+      font-size: 1.8rem;
+      margin-top: 0;
+      margin-bottom: 1rem;
+    }
 
-      .evento .imagem,
-      .evento .evento-content {
-        width: 100%;
-        padding: 0;
-      }
-
-      .linha-tempo::after {
-        left: 20px;
-        transform: none;
-      }
+    .evento .evento-content p {
+      margin: 0;
+      line-height: 1.5;
+      color: #333;
     }
 
     footer {
@@ -186,6 +272,7 @@
       align-items: center;
       padding: 2rem;
       flex-wrap: wrap;
+      margin-top: 3rem;
     }
 
     .footer-left {
@@ -212,11 +299,11 @@
       width: 150px;
       margin-right: 15px;
       height: auto;
+      transition: transform 0.3s;
     }
-
-    .footer-logo h2 {
-      font-size: 5rem;
-      margin: 0;
+    
+    .footer-logo img:hover {
+      transform: scale(1.1);
     }
 
     .footer-button {
@@ -229,36 +316,175 @@
       cursor: pointer;
       text-decoration: none;
       font-size: 1.2rem;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
     }
 
     .footer-button:hover {
       background-color: #e3f2fd;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 10px rgba(0,0,0,0.3);
+    }
+
+    /* Sidebar Styles */
+    .menu-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #0d47a1;
+      margin-left: 1rem;
+      transition: transform 0.3s;
+    }
+    
+    .menu-icon:hover {
+      transform: scale(1.2);
+    }
+
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 260px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 15px rgba(0,0,0,0.3);
+      padding: 1.5rem;
+      box-sizing: border-box;
+      z-index: 999;
+      transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-header img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      border: 2px solid #0d47a1;
+      transition: transform 0.3s;
+    }
+    
+    .sidebar-header img:hover {
+      transform: rotate(10deg) scale(1.1);
+    }
+
+    .sidebar-header div {
+      font-size: 1.2rem;
+      color: #0d47a1;
+      font-weight: bold;
+    }
+
+    .sidebar a, .sidebar button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 1rem;
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 1px solid #e0e0e0;
+      transition: all 0.3s;
+      margin: 0.5rem 0;
+      border-radius: 5px;
+    }
+
+    .sidebar button:hover, .sidebar a:hover {
+      background-color: #e3f2fd;
+      padding-left: 1.5rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+
+    @media (max-width: 768px) {
+      .evento {
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+      }
+
+      .evento .imagem,
+      .evento .evento-content {
+        width: 100%;
+        padding: 0;
+      }
+
+      .linha-tempo::after {
+        left: 20px;
+        transform: none;
+      }
+      
+      .navbar nav {
+        flex-wrap: wrap;
+        justify-content: center;
+      }
+      
+      .evento .evento-content {
+        margin-top: 1rem;
+        border-left: none;
+        border-top: 4px solid #0d47a1;
+      }
+      
+      .evento .evento-content::before {
+        top: -12px;
+        left: 50%;
+        transform: translateX(-50%);
+      }
+      
+      .evento .imagem img {
+        width: 100%;
+        max-width: 280px;
+        height: auto;
+      }
     }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    Rua Conde das Sardezas, 123 - São Paulo | (11) 98765-4321
-  </div>
-
+  <div class="topbar">Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321</div>
+  
   <div class="navbar">
-    <img src="ler.png" alt="Logo Ler+">
+    <a href="index.html">
+      <img src="ler.png" alt="Logo Ler+">
+    </a>
     <nav>
       <a href="index.html">Início</a>
       <a href="quem-somos.html">Quem Somos</a>
       <div class="dropdown">
         <a href="#">Gêneros ▾</a>
         <div class="dropdown-content">
-          <a href="#fantasia">Fantasia</a>
-          <a href="#classicos">Clássicos</a>
-          <a href="#brasileira">Literatura Brasileira</a>
-          <a href="#romance">Romance</a>
+          <a href="#">Fantasia</a>
+          <a href="#">Romance</a>
+          <a href="#">Ficção</a>
+          <a href="#">Terror</a>
         </div>
       </div>
       <a href="promocoes.html" class="promo-button">Promoções</a>
+      <a href="carrinho.html" class="cart-icon">🛒</a>
+      <button class="menu-icon">☰</button>
     </nav>
   </div>
+
+  <!-- === SIDEBAR IGUAL À DE promocoes.html === -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header" id="sidebar-header">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+    <div id="sidebar-links">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+  </div>
+
 
   <section class="quem-somos">
     <h2>Quem Somos</h2>
@@ -277,28 +503,28 @@
       <div class="imagem"><img src="Screenshot 2025-05-06 at 20-31-09 Design sem nome - Post para Instagram.png" alt="Inauguração Ler+"></div>
       <div class="evento-content">
         <h3>1998</h3>
-        <p>Inauguração da primeira loja Ler+ em São Paulo.</p>
+        <p>Inauguração da primeira loja Ler+ em São Paulo, com um acervo cuidadosamente selecionado para atender a todos os tipos de leitores.</p>
       </div>
     </div>
     <div class="evento">
       <div class="imagem"><img src="Screenshot 2025-05-06 at 21-05-24 Design sem nome - Post para Instagram.png" alt="Bienal do Livro"></div>
       <div class="evento-content">
         <h3>2006</h3>
-        <p>Participação na Bienal Internacional do Livro em São Paulo.</p>
+        <p>Participação na Bienal Internacional do Livro em São Paulo, marcando nosso reconhecimento no mercado literário nacional.</p>
       </div>
     </div>
     <div class="evento">
       <div class="imagem"><img src="Screenshot 2025-05-06 at 23-02-38 LER - Post para Instagram.png" alt="Loja Online Ler+"></div>
       <div class="evento-content">
         <h3>2016</h3>
-        <p>Criação da nossa loja online, levando literatura a todo o Brasil.</p>
+        <p>Criação da nossa loja online, expandindo nosso alcance e levando literatura de qualidade para todo o Brasil.</p>
       </div>
     </div>
     <div class="evento">
       <div class="imagem"><img src="Captura de tela 2025-05-06 230422.png" alt="Novo site Ler+"></div>
       <div class="evento-content">
         <h3>2025</h3>
-        <p>Revitalização completa do site, com novas experiências para leitores.</p>
+        <p>Revitalização completa do site, oferecendo novas experiências digitais para nossos leitores e modernizando nossa presença online.</p>
       </div>
     </div>
   </section>
@@ -310,7 +536,7 @@
     </div>
     <div class="footer-center">
       <div class="footer-logo">
-        <img src="ler-removebg-preview(2).png" alt="Logo Ler+" style="width: 350px; height: auto;">
+        <img src="Logo Branca.png" alt="Logo Ler+" style="width: 350px; height: auto;">
       </div>
     </div>
     <div class="footer-right">
@@ -319,19 +545,109 @@
   </footer>
 
   <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('show');
-        }
-      });
-    }, {
-      threshold: 0.2
+    // Sidebar functionality
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
     });
 
-    document.querySelectorAll('.evento').forEach(evento => {
-      observer.observe(evento);
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      
+      if (user) {
+        header.innerHTML = `
+          <img src="${user.foto || 'user-default.png'}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="perfil.html">Meu Perfil</a>
+          <a href="pedidos.html">Meus Pedidos</a>
+          <a href="favoritos.html">Favoritos</a>
+          <button onclick="logout()">Sair</button>
+        `;
+      } else {
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+      }
+
+      // Animação da linha do tempo
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('show');
+          }
+        });
+      }, {
+        threshold: 0.2
+      });
+
+      document.querySelectorAll('.evento').forEach(evento => {
+        observer.observe(evento);
+      });
     });
+
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!sidebar.contains(event.target) && event.target !== menuIcon) {
+        sidebar.classList.remove('open');
+      }
+    });
+    // === [COLE AQUI O JAVASCRIPT DE CONTROLE DO SIDEBAR DE promocoes.html] ===
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      
+      if (user) {
+        header.innerHTML = `
+          <img src="${user.foto || 'user-default.png'}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="perfil.html">Meu Perfil</a>
+          <a href="pedidos.html">Meus Pedidos</a>
+          <a href="favoritos.html">Favoritos</a>
+          <button onclick="logout()">Sair</button>
+        `;
+      } else {
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+      }
+    });
+
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!sidebar.contains(event.target) && event.target !== menuIcon) {
+        sidebar.classList.remove('open');
+      }
+    });
+    // === [FIM DO JAVASCRIPT] ===
+  </script>
   </script>
 </body>
 </html>

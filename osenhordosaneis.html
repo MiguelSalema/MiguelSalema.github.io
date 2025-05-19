@@ -1,0 +1,699 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Comprar O Senhor dos Anéis - Ler+ Livraria</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #ffffff;
+      color: #0d47a1;
+    }
+    .topbar {
+      background-color: #0d47a1;
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      border-bottom: 2px solid #0d47a1;
+      padding: 1rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar img {
+      width: 180px;
+      transition: transform 0.3s;
+    }
+    .navbar img:hover {
+      transform: scale(1.05);
+    }
+    .navbar nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .navbar nav a {
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      transition: all 0.3s;
+      padding: 0.5rem;
+      position: relative;
+    }
+    .navbar nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #08306b;
+      transition: width 0.3s;
+    }
+    .navbar nav a:hover {
+      color: #08306b;
+    }
+    .navbar nav a:hover::after {
+      width: 100%;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease-out;
+    }
+    .dropdown-content a {
+      color: #0d47a1;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: all 0.2s;
+    }
+    .dropdown-content a:hover {
+      background-color: #e3f2fd;
+      padding-left: 20px;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .promo-button {
+      background-color: #0d47a1;
+      color: white !important;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .promo-button:hover {
+      background-color: #08306b;
+      transform: translateY(-2px);
+    }
+    .cart-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+      position: relative;
+    }
+    .cart-icon:hover {
+      transform: scale(1.2);
+    }
+    .menu-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #0d47a1;
+      margin-left: 1rem;
+      transition: transform 0.3s;
+    }
+    .menu-icon:hover {
+      transform: scale(1.2);
+    }
+    .container {
+      display: flex;
+      flex-direction: row;
+      padding: 2rem;
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+    .book-img {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    .book-img img {
+      width: 100%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .book-img img:hover {
+      transform: scale(1.05);
+    }
+    .book-details {
+      flex: 2;
+    }
+    .preco-original {
+      text-decoration: line-through;
+      color: gray;
+    }
+    .preco-desconto {
+      font-size: 1.8rem;
+      font-weight: bold;
+      color: #c62828;
+    }
+    .avaliacao {
+      margin: 0.5rem 0;
+      color: #ffb400;
+    }
+    .autor-link {
+      font-size: 0.9rem;
+      color: #0d47a1;
+      text-decoration: underline;
+      cursor: pointer;
+    }
+    .frete {
+      background-color: #f4f4f4;
+      padding: 1rem;
+      margin-top: 1.5rem;
+      border-radius: 6px;
+    }
+    .frete label {
+      font-weight: bold;
+    }
+    .frete select {
+      margin-top: 0.5rem;
+      padding: 0.4rem;
+      border-radius: 4px;
+      border: 1px solid #0d47a1;
+    }
+    .frete p {
+      margin-top: 1rem;
+      font-weight: bold;
+    }
+    .add-carrinho {
+      display: inline-block;
+      margin-top: 1.5rem;
+      padding: 0.75rem 1.5rem;
+      background-color: #0d47a1;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 1rem;
+      transition: all 0.3s;
+    }
+    .add-carrinho:hover {
+      background-color: #08306b;
+      transform: translateY(-2px);
+      box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+    }
+    .book-description {
+      margin-top: 1.5rem;
+      line-height: 1.6;
+      padding: 1rem;
+      background-color: #f9f9f9;
+      border-left: 4px solid #0d47a1;
+      border-radius: 0 4px 4px 0;
+    }
+    .book-description h3 {
+      margin-top: 0;
+      color: #0d47a1;
+    }
+    .sugestoes {
+      padding: 2rem;
+      background-color: #e3f2fd;
+    }
+    .sugestoes h2 {
+      text-align: center;
+      margin-bottom: 1.5rem;
+      color: #0d47a1;
+    }
+    .book-list {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+    }
+    .book-item {
+      text-align: center;
+      width: 160px;
+      transition: transform 0.3s;
+      cursor: pointer;
+    }
+    .book-item:hover {
+      transform: translateY(-5px);
+    }
+    .book-item img {
+      width: 100%;
+      height: 220px;
+      object-fit: cover;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    .book-item p {
+      margin: 0.5rem 0;
+    }
+    .book-item strong {
+      color: #0d47a1;
+    }
+    footer {
+      background-color: #0d47a1;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 2rem;
+      flex-wrap: wrap;
+    }
+    .footer-left {
+      text-align: left;
+      font-size: 0.9rem;
+      max-width: 200px;
+    }
+    .footer-center {
+      text-align: center;
+    }
+    .footer-right {
+      text-align: right;
+    }
+    .footer-logo {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .footer-logo img {
+      width: 150px;
+      margin-right: 15px;
+      height: auto;
+    }
+    .footer-button {
+      background-color: white;
+      color: #0d47a1;
+      padding: 1rem 1.75rem;
+      border: none;
+      border-radius: 5px;
+      font-weight: bold;
+      cursor: pointer;
+      text-decoration: none;
+      font-size: 1.2rem;
+      transition: background-color 0.3s;
+    }
+    .footer-button:hover {
+      background-color: #e3f2fd;
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      margin-left: 1rem;
+    }
+    .dropdown button {
+      background: none;
+      border: none;
+      color: #0d47a1;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: white;
+      min-width: 120px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .dropdown-content a {
+      color: #0d47a1;
+      padding: 10px;
+      display: block;
+      text-decoration: none;
+    }
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    /* Sidebar Styles */
+    .menu-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #0d47a1;
+      margin-left: 1rem;
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 260px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+      padding: 1.5rem;
+      box-sizing: border-box;
+      z-index: 999;
+      transition: right 0.3s ease-in-out;
+    }
+    .sidebar.open {
+      right: 0;
+    }
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .sidebar-header img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      border: 2px solid #0d47a1;
+    }
+    .sidebar-header div {
+      font-size: 1.2rem;
+      color: #0d47a1;
+    }
+    .sidebar a, .sidebar button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 1px solid #ccc;
+    }
+    .sidebar button:hover, .sidebar a:hover {
+      background-color: #e3f2fd;
+    }
+    /* Modal de zoom */
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      overflow: auto;
+    }
+    .modal-content {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100%;
+    }
+    .modal-content img {
+      max-width: 80%;
+      max-height: 80%;
+      border: 5px solid white;
+      border-radius: 8px;
+    }
+    .close {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      color: white;
+      font-size: 35px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .contador {
+      display: inline-block;
+      margin-left: 1rem;
+      padding: 0.2rem 0.5rem;
+      background-color: #0d47a1;
+      color: white;
+      border-radius: 50%;
+      font-size: 0.8rem;
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321</div>
+  
+  <div class="navbar">
+    <a href="index.html">
+      <img src="ler.png" alt="Logo Ler+">
+    </a>
+    <nav>
+      <a href="index.html">Início</a>
+      <a href="quem-somos.html">Quem Somos</a>
+      <div class="dropdown">
+        <a href="#">Gêneros ▾</a>
+        <div class="dropdown-content">
+          <a href="#">Fantasia</a>
+          <a href="#">Romance</a>
+          <a href="#">Ficção</a>
+          <a href="#">Terror</a>
+        </div>
+      </div>
+      <a href="promocoes.html" class="promo-button">Promoções</a>
+      <a href="carrinho.html" class="cart-icon">🛒 <span class="contador" id="cart-count">0</span></a>
+      <button class="menu-icon">☰</button>
+    </nav>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header" id="sidebar-header">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+    <div id="sidebar-links">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+  </div>
+
+  <div class="container">
+    <div class="book-img">
+      <img src="o-senhor-dos-aneis.png" alt="O Senhor dos Anéis: Parte 1" id="book-image">
+      <small>Clique na imagem para ampliar</small>
+    </div>
+    <div class="book-details">
+      <h1>O Senhor dos Anéis: Parte 1</h1>
+      <p class="preco-original">De: R$ 49,90</p>
+      <p class="preco-desconto">Por: R$ 39,90 <span style="color: #388e3c; font-size: 1rem;">(20% de desconto)</span></p>
+      <p class="avaliacao">★★★★★ 4.9 (587 avaliações)</p>
+      <p><a class="autor-link" href="#" onclick="mostrarLivrosAutor()">Mais livros de J.R.R. Tolkien</a></p>
+
+      <div class="book-description">
+        <h3>Sinopse</h3>
+        <p>O Senhor dos Anéis: Parte 1 (A Sociedade do Anel) é o primeiro volume da trilogia épica de J.R.R. Tolkien. A história começa na pacata Vila dos Hobbits, quando Frodo Bolseiro herda um anel aparentemente comum de seu tio Bilbo. Este anel, no entanto, é o Um Anel, forjado pelo Senhor do Escuro Sauron para dominar toda a Terra-média. Frodo parte em uma jornada perigosa para destruir o anel, acompanhado por um grupo diversificado que forma a Sociedade do Anel. Esta edição contém a primeira parte da jornada, desde a Vila dos Hobbits até as Minas de Moria, com personagens icônicos como Gandalf, Aragorn, Legolas e Gimli.</p>
+      </div>
+
+      <div class="frete">
+        <label for="estado">Calcular frete:</label><br>
+        <select id="estado" onchange="calcularFrete()">
+          <option value="">Selecione o estado</option>
+          <option value="SP">São Paulo</option>
+          <option value="RJ">Rio de Janeiro</option>
+          <option value="MG">Minas Gerais</option>
+          <option value="ES">Espírito Santo</option>
+          <option value="outros">Outro</option>
+        </select>
+        <p id="resultado-frete"></p>
+      </div>
+
+      <button class="add-carrinho" onclick="adicionarAoCarrinho()">Adicionar ao Carrinho</button>
+    </div>
+  </div>
+
+  <!-- Modal para zoom da imagem -->
+  <div id="imageModal" class="modal">
+    <span class="close" onclick="fecharModal()">&times;</span>
+    <div class="modal-content">
+      <img id="modalImage" src="" alt="Imagem ampliada">
+    </div>
+  </div>
+
+  <section class="sugestoes">
+    <h2>Quem comprou este livro também gostou</h2>
+    <div class="book-list">
+      <a href="hobbit.html" class="book-item">
+        <img src="hobbit.jpg" alt="O Hobbit">
+        <p><strong>O Hobbit</strong><br>J.R.R. Tolkien<br>R$ 34,90</p>
+      </a>
+      <a href="harrypotter.html" class="book-item">
+        <img src="harry-potter.png" alt="Harry Potter e a Pedra Filosofal">
+        <p><strong>Harry Potter e a Pedra Filosofal</strong><br>J.K. Rowling<br>R$ 26,90</p>
+      </a>
+      <a href="eragon.html" class="book-item">
+        <img src="eragon.png" alt="Eragon">
+        <p><strong>Eragon</strong><br>Christopher Paolini<br>R$ 31,90</p>
+      </a>
+      <a href="duna.html" class="book-item">
+        <img src="duna.png" alt="Duna">
+        <p><strong>Duna</strong><br>Frank Herbert<br>R$ 45,90</p>
+      </a>
+      <a href="nome-do-vento.html" class="book-item">
+        <img src="nome-do-vento.jpg" alt="O Nome do Vento">
+        <p><strong>O Nome do Vento</strong><br>Patrick Rothfuss<br>R$ 39,90</p>
+      </a>
+    </div>
+  </section>
+
+  <footer>
+    <div class="footer-left">
+      <p>Rua Conde das Sardezas, 123<br>São Paulo, SP</p>
+      <p>(11) 98765-4321</p>
+    </div>
+    <div class="footer-center">
+      <div class="footer-logo">
+        <img src="Logo Branca.png" alt="Logo Ler+" style="width: 350px; height: auto;">
+      </div>
+    </div>
+    <div class="footer-right">
+      <a href="promocoes.html" class="footer-button">Faça seu pedido!</a>
+    </div>
+  </footer>
+
+  <script>
+    // Função para filtrar os livros do mesmo autor
+    function mostrarLivrosAutor() {
+      alert("Mostrando todos os livros de J.R.R. Tolkien...");
+      // Redirecionar ou filtrar os livros do autor
+    }
+
+    // Função para calcular o frete
+    function calcularFrete() {
+      const estado = document.getElementById("estado").value;
+      let frete = 0;
+      if (estado === "SP") frete = 2;
+      else if (["RJ", "MG", "ES"].includes(estado)) frete = 6;
+      else if (estado) frete = 15;
+      document.getElementById("resultado-frete").innerText = estado ? `Frete: R$ ${frete.toFixed(2)}` : "";
+    }
+
+    // Função para adicionar ao carrinho
+    function adicionarAoCarrinho() {
+      const usuario = localStorage.getItem("usuarioLogado");
+
+      if (!usuario) {
+        alert("Você precisa estar logado para adicionar itens ao carrinho.");
+        window.location.href = "entrar.html";
+        return;
+      }
+
+      const item = {
+        titulo: "O Senhor dos Anéis: Parte 1",
+        preco: 39.90,
+        imagem: "o-senhor-dos-aneis.png",
+        quantidade: 1
+      };
+
+      let carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+      const existente = carrinho.find(prod => prod.titulo === item.titulo);
+
+      if (existente) {
+        existente.quantidade += 1;
+      } else {
+        carrinho.push(item);
+      }
+
+      localStorage.setItem("carrinho", JSON.stringify(carrinho));
+      atualizarContadorCarrinho();
+      
+      // Efeito visual de confirmação
+      const btn = document.querySelector('.add-carrinho');
+      btn.textContent = "✔ Adicionado!";
+      btn.style.backgroundColor = "#388e3c";
+      setTimeout(() => {
+        btn.textContent = "Adicionar ao Carrinho";
+        btn.style.backgroundColor = "#0d47a1";
+      }, 2000);
+    }
+
+    // Atualizar contador do carrinho
+    function atualizarContadorCarrinho() {
+      const carrinho = JSON.parse(localStorage.getItem("carrinho")) || [];
+      const totalItens = carrinho.reduce((total, item) => total + item.quantidade, 0);
+      document.getElementById("cart-count").textContent = totalItens;
+    }
+
+    // Modal para zoom da imagem
+    const modal = document.getElementById("imageModal");
+    const modalImg = document.getElementById("modalImage");
+    const img = document.getElementById("book-image");
+
+    img.onclick = function() {
+      modal.style.display = "block";
+      modalImg.src = this.src;
+    }
+
+    function fecharModal() {
+      modal.style.display = "none";
+    }
+
+    // Fechar modal ao clicar fora da imagem
+    window.onclick = function(event) {
+      if (event.target == modal) {
+        modal.style.display = "none";
+      }
+    }
+
+    // Sidebar functionality
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+
+    function loadSidebar() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      
+      if (user) {
+        header.innerHTML = `
+          <img src="${user.foto || 'user-default.png'}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="perfil.html">Meu Perfil</a>
+          <a href="pedidos.html">Meus Pedidos</a>
+          <a href="favoritos.html">Favoritos</a>
+          <button onclick="logout()">Sair</button>
+        `;
+      } else {
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+      }
+    }
+
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!sidebar.contains(event.target) && event.target !== menuIcon) {
+        sidebar.classList.remove('open');
+      }
+    });
+
+    // Initialize
+    window.onload = function() {
+      loadSidebar();
+      atualizarContadorCarrinho();
+    };
+  </script>
+</body>
+</html>

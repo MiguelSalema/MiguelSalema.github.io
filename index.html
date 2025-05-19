@@ -8,45 +8,93 @@
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background-color: white;
+      background-color: #ffffff;
       color: #0d47a1;
     }
     .topbar {
       background-color: #0d47a1;
       color: white;
       padding: 1rem 0;
-      font-size: 1rem;
       text-align: center;
-      width: 100%;
-      box-sizing: border-box;
+      font-size: 0.9rem;
     }
     .navbar {
       display: flex;
-      align-items: center;
       justify-content: space-between;
+      align-items: center;
       background-color: white;
       border-bottom: 2px solid #0d47a1;
-      padding: 0.5rem;
+      padding: 1rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
     }
     .navbar img {
-      width: 250px;
-      margin-right: 5px;
+      width: 180px;
+      transition: transform 0.3s;
     }
-    .navbar h1 {
-      font-size: 1.5rem;
-      color: #0d47a1;
-      margin: 0;
+    .navbar img:hover {
+      transform: scale(1.05);
+    }
+    .navbar nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
     }
     .navbar nav a {
-      margin: 0 1rem;
       text-decoration: none;
       color: #0d47a1;
       font-weight: bold;
+      transition: all 0.3s;
+      padding: 0.5rem;
       position: relative;
-      transition: color 0.3s;
+    }
+    .navbar nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #08306b;
+      transition: width 0.3s;
     }
     .navbar nav a:hover {
       color: #08306b;
+    }
+    .navbar nav a:hover::after {
+      width: 100%;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease-out;
+    }
+    .dropdown-content a {
+      color: #0d47a1;
+      padding: 12px 16px;
+      text-decoration: none;
+      display: block;
+      transition: all 0.2s;
+    }
+    .dropdown-content a:hover {
+      background-color: #e3f2fd;
+      padding-left: 20px;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
     }
     .promo-button {
       background-color: #0d47a1;
@@ -54,30 +102,90 @@
       padding: 0.4rem 0.8rem;
       border-radius: 5px;
       text-decoration: none;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
     }
     .promo-button:hover {
       background-color: #08306b;
+      transform: translateY(-2px);
     }
-    .dropdown {
-      position: relative;
-      display: inline-block;
+    .cart-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
     }
-    .dropdown-content {
-      display: none;
-      position: absolute;
+    .cart-icon:hover {
+      transform: scale(1.2);
+    }
+    .menu-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #0d47a1;
+      margin-left: 1rem;
+      transition: transform 0.3s;
+    }
+    .menu-icon:hover {
+      transform: scale(1.2);
+    }
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 260px;
+      height: 100%;
       background-color: white;
-      border: 1px solid #0d47a1;
-      min-width: 160px;
-      z-index: 1;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+      padding: 1.5rem;
+      box-sizing: border-box;
+      z-index: 999;
+      transition: right 0.3s ease-in-out;
     }
-    .dropdown-content a {
-      display: block;
-      padding: 0.5rem;
+
+    .sidebar.open {
+      right: 0;
+    }
+
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .sidebar-header img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      border: 2px solid #0d47a1;
+      transition: transform 0.3s;
+    }
+    .sidebar-header img:hover {
+      transform: scale(1.1);
+    }
+
+    .sidebar-header div {
+      font-size: 1.2rem;
       color: #0d47a1;
     }
-    .dropdown:hover .dropdown-content {
+
+    .sidebar a, .sidebar button {
       display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 1px solid #ccc;
+      transition: background-color 0.3s, padding-left 0.3s;
+    }
+
+    .sidebar button:hover, .sidebar a:hover {
+      background-color: #e3f2fd;
+      padding-left: 10px;
     }
     .hero {
       text-align: center;
@@ -88,19 +196,36 @@
       justify-content: center;
       align-items: center;
       background-color: white;
-      background-image: url(pexels-technobulka-2908984.jpg); /* Imagem de exemplo */
+      background-image: url(pexels-technobulka-2908984.jpg);
       background-size: cover;
       background-position: center;
       background-repeat: no-repeat;
+      position: relative;
+    }
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(255,255,255,0.05);
     }
     .hero h2 {
       color: #0d47a1;
       font-size: 2.2rem;
-      background-color: rgba(255, 255, 255, 0.8); /* fundo branco com transparência */
+      background-color: rgba(255, 255, 255, 0.8);
       border: 2px solid #0d47a1;
       padding: 1rem 2rem;
       border-radius: 10px;
       display: inline-block;
+      position: relative;
+      z-index: 1;
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+    .hero h2:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.2);
     }
     .button {
       background-color: #0d47a1;
@@ -110,32 +235,67 @@
       border-radius: 5px;
       font-size: 1rem;
       cursor: pointer;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
+      position: relative;
+      z-index: 1;
     }
     .button:hover {
       background-color: #08306b;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.2);
     }
     .author-of-month {
-      background-color: #e3f2fd;
+      background-color: #0d47a1;
+      color: white;
       padding: 2rem;
       text-align: center;
+    }
+    .author-of-month:hover {
+      background-color: #08306b; /* Azul mais escuro no hover */
+    }
+    .author-of-month h2 {
+      color: white; /* Garantir que o título fique branco */
+      margin-bottom: 1rem;
+    }
+    .author-of-month p {
+      color: white; /* Texto branco */
+      margin-bottom: 1.5rem;
+    }
+    .author-of-month strong {
+      color: white; /* Destaque em branco */
+      font-weight: bold;
     }
     .book-list {
       display: flex;
       justify-content: center;
-      gap: 1rem;
+      gap: 1rem; /* Espaço entre os livros */
       flex-wrap: wrap;
+      padding: 1rem 0;
     }
     .book-item {
       text-align: center;
+      width: auto; /* Removendo largura fixa */
+      margin: 0 0.5rem; /* Espaçamento opcional */
+    }
+    .book-item p {
+      color: white; /* Texto dos livros em branco */
+      margin: 0.5rem 0;
+      transition: color 0.3s;
+    }
+    .book-item:hover p {
+      color: #e3f2fd; /* Azul claro no hover para contraste */
     }
     .book-item img {
-      width: 150px;
-      height: 200px;
-      border: 2px solid #0d47a1;
+      width: 100px; /* Tamanho original */
+      height: auto; /* Altura automática para manter proporção */
+      border: 2px solid #5192f3;
       border-radius: 10px;
+      object-fit: cover;
+      transition: all 0.3s;
     }
     .store-info {
+      background-color: white;
+      color: #0d47a1;
       display: flex;
       justify-content: space-between;
       padding: 2rem;
@@ -144,17 +304,36 @@
     .store-text {
       flex: 1;
       text-align: left;
-      
+    }
+    .store-text h2 {
+      transition: color 0.3s;
+      cursor: default;
+    }
+    .store-text h2:hover {
+      color: #08306b;
     }
     .store-map {
       flex: 1;
       height: 250px;
       border: 1px solid #0d47a1;
+      border-radius: 8px;
+      overflow: hidden;
+      transition: box-shadow 0.3s;
+    }
+    .store-map:hover {
+      box-shadow: 0 8px 16px rgba(0,0,0,0.2);
     }
     @media (max-width: 768px) {
       .store-info {
         flex-direction: column;
         align-items: center;
+      }
+      .store-map {
+        width: 100%;
+      }
+      .hero h2 {
+        font-size: 1.8rem;
+        padding: 0.8rem 1.5rem;
       }
     }
     footer {
@@ -183,8 +362,12 @@
       justify-content: center;
     }
     .footer-logo img {
-      width: 120px;
+      width: 325px;
       margin-right: 15px;
+      transition: transform 0.5s;
+    }
+    .footer-logo img:hover {
+      transform: rotate(5deg) scale(1.1);
     }
     .footer-logo h2 {
       font-size: 5rem;
@@ -200,59 +383,151 @@
       cursor: pointer;
       text-decoration: none;
       font-size: 1.2rem;
-      transition: background-color 0.3s;
+      transition: all 0.3s;
     }
     .footer-button:hover {
       background-color: #e3f2fd;
+      transform: translateY(-3px);
+      box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    .dropdown {
+      position: relative;
+      display: inline-block;
+      margin-left: 1rem;
+    }
+
+    .dropdown button {
+      background: none;
+      border: none;
+      color: #0d47a1;
+      font-weight: bold;
+      font-size: 1rem;
+      cursor: pointer;
+    }
+
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      right: 0;
+      background-color: white;
+      min-width: 120px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+      animation: fadeIn 0.3s;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .dropdown-content a {
+      color: #0d47a1;
+      padding: 10px;
+      display: block;
+      text-decoration: none;
+      transition: background-color 0.3s;
+    }
+
+    .dropdown-content a:hover {
+      background-color: #f1f1f1;
+    }
+
+    .dropdown:hover .dropdown-content {
+      display: block;
+    }
+    .store-map iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    /* Animação de flutuação para os livros */
+    @keyframes float {
+      0% { transform: translateY(0px); }
+      50% { transform: translateY(-10px); }
+      100% { transform: translateY(0px); }
+    }
+    .book-item {
+      animation: float 4s ease-in-out infinite;
+    }
+    .book-item:nth-child(2) {
+      animation-delay: 0.5s;
+    }
+    .book-item:nth-child(3) {
+      animation-delay: 1s;
+    }
+    /* Efeito de pulse no botão do carrinho */
+    @keyframes pulse {
+      0% { transform: scale(1); }
+      50% { transform: scale(1.1); }
+      100% { transform: scale(1); }
+    }
+    .cart-icon.pulse {
+      animation: pulse 0.5s ease;
     }
   </style>
 </head>
 <body>
-  <div class="topbar">
-    Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321
-  </div>
+  <div class="topbar">Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321</div>
+  
   <div class="navbar">
-    <div style="display: flex; align-items: center;">
-      <img src="ler.png" alt="Logo"> 
-    </div>
+    <a href="index.html">
+      <img src="ler.png" alt="Logo Ler+">
+    </a>
     <nav>
       <a href="index.html">Início</a>
       <a href="quem-somos.html">Quem Somos</a>
       <div class="dropdown">
-        <a href="#generos">Gêneros</a>
+        <a href="#">Gêneros ▾</a>
         <div class="dropdown-content">
-          <a href="#fantasia">Fantasia</a>
-          <a href="#classicos">Clássicos</a>
-          <a href="#brasileira">Literatura Brasileira</a>
-          <a href="#romance">Romance</a>
+          <a href="#">Fantasia</a>
+          <a href="#">Romance</a>
+          <a href="#">Ficção</a>
+          <a href="#">Terror</a>
         </div>
       </div>
       <a href="promocoes.html" class="promo-button">Promoções</a>
+      <a href="carrinho.html" class="cart-icon">🛒</a>
+      <button class="menu-icon">☰</button>
     </nav>
   </div>
 
-  <section class="hero">
-  <h2>Promoções especiais + frete grátis!</h2>
-  <a href="promocoes.html" class="button" aria-label="Compre agora">Compre já!</a>
-  </section>
+  <!-- === SIDEBAR IGUAL À DE promocoes.html === -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header" id="sidebar-header">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+    <div id="sidebar-links">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+  </div>
 
+
+  <a href="promocoes.html" style="text-decoration: none;">
+    <section class="hero">
+      <h2>Promoções especiais + frete grátis!</h2>
+      <button class="button" aria-label="Compre agora">Compre já!</button>
+    </section>
+  </a>
 
   <section class="author-of-month">
     <h2>Autor do Mês: Machado de Assis</h2>
     <p>Todos os livros com <strong>50% de desconto</strong> durante o mês de maio!</p>
     <div class="book-list">
-      <div class="book-item">
-        <img src="domcasmurro.png" alt="Dom Casmurro">
-        <p>Dom Casmurro - R$ 29,90</p>
-      </div>
-      <div class="book-item">
-        <img src="memoriaspostumas.png" alt="Memórias Póstumas">
-        <p>Memórias Póstumas - R$ 24,90</p>
-      </div>
-      <div class="book-item">
-        <img src="alienista.jfif" alt="Senhora">
-        <p>Senhora - R$ 19,90</p>
-      </div>
+      <a href="domcasmurro.html" class="book-item" data-genre="literatura-brasileira" data-title="Dom Casmurro" data-author="Machado de Assis">
+        <img src="domcasmurro.jpg" alt="Dom Casmurro">
+        <p><strong>Dom Casmurro</strong><br>Machado de Assis<br>R$ 12,90</p>
+      </a>
+      <a href="memoriaspostumas.html" class="book-item" data-genre="literatura-brasileira" data-title="Memórias Postumas de Brás Cubas" data-author="Machado de Assis">
+        <img src="memoriaspostumas.png" alt="Memórias Postumas de Brás Cubas">
+        <p><strong>Memórias Póstumas</strong><br>Machado de Assis<br>R$ 21,90</p>
+      </a>
+      <a href="oalienista.html" class="book-item" data-genre="literatura-brasileira" data-title="Alienista" data-author="Machado de Assis">
+        <img src="alienista.jfif" alt="Alienista">
+        <p><strong>Alienista</strong><br>Machado de Assis<br>R$ 13,90</p>
+      </a>
     </div>
   </section>
 
@@ -260,9 +535,15 @@
     <div class="store-text">
       <h2>Conheça a nossa loja!</h2>
       <p>Na Ler+ Livraria, você encontra um vasto acervo de livros de diversos gêneros, com um atendimento personalizado e um ambiente acolhedor. Visite-nos e explore os clássicos da literatura mundial, obras de autores contemporâneos e muito mais. Estamos localizados no coração de São Paulo, esperando por você!</p>
+      <button class="button" src="https://www.google.com/maps/place/Rua+Conde+de+Sarzedas,+123+-+S%C3%A9,+S%C3%A3o+Paulo+-+SP,+01512-070/@-23.55374,-46.632021,15z/data=!4m5!3m4!1s0x94ce59a9c326148b:0xeafac0ab4329c6ce!8m2!3d-23.5537397!4d-46.6320209?hl=pt-BR&entry=ttu&g_ep=EgoyMDI1MDUwNy4wIKXMDSoASAFQAw%3D%3D" style="margin-top: 1rem;" onclick="scrollToMap()">Ver no mapa</button>
     </div>
-    <div class="store-map">
-      <img src="Screenshot 2025-05-06 at 23-30-02 Rua Conde de Sarzedas - Sé - Google Maps.png" alt="Logo Ler+"style="width: 780px; height: auto;">
+    <div class="store-map" id="storeMap">
+      <iframe 
+        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3657.376415272032!2d-46.63432292544138!3d-23.55493057880098!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x94ce590f69df1c1b%3A0x91bdd43e1a1a3f4e!2sR.%20Conde%20de%20Sarzedas%2C%20123%20-%20S%C3%A9%2C%20S%C3%A3o%20Paulo%20-%20SP%2C%2001508-000!5e0!3m2!1spt-BR!2sbr!4v1715031234567!5m2!1spt-BR!2sbr" 
+        allowfullscreen="" 
+        loading="lazy" 
+        referrerpolicy="no-referrer-when-downgrade">
+      </iframe>
     </div>
   </section>
 
@@ -273,12 +554,147 @@
     </div>
     <div class="footer-center">
       <div class="footer-logo">
-        <img src="ler-removebg-preview(2).png" alt="Logo Ler+"style="width: 350px; height: auto;">
+        <img src="Logo Branca.png" alt="Logo Ler+">
       </div>
     </div>
     <div class="footer-right">
       <a href="promocoes.html" class="footer-button" aria-label="Fazer pedido">Faça seu pedido!</a>
     </div>
   </footer>
+
+  <script>
+    // Função para abrir/fechar o sidebar
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    // Função para logout
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+
+    // Carrega as informações do usuário ao abrir a página
+    document.addEventListener("DOMContentLoaded", function() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      
+      if (user) {
+        // Usuário logado - mostra perfil e opções
+        header.innerHTML = `
+          <img src="${user.foto || 'user-default.png'}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="perfil.html">Meu Perfil</a>
+          <a href="pedidos.html">Meus Pedidos</a>
+          <a href="favoritos.html">Favoritos</a>
+          <button onclick="logout()">Sair</button>
+        `;
+      } else {
+        // Usuário não logado - mostra opções de login
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+      }
+
+      // Atualiza contador do carrinho
+      updateCartCounter();
+    });
+
+    // Fecha o sidebar ao clicar fora dele
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!sidebar.contains(event.target) && event.target !== menuIcon) {
+        sidebar.classList.remove('open');
+      }
+    });
+
+    // Atualiza contador do carrinho
+    function updateCartCounter() {
+      const cart = JSON.parse(localStorage.getItem("carrinho")) || [];
+      const totalItems = cart.reduce((total, item) => total + item.quantidade, 0);
+      document.getElementById("cart-counter").textContent = totalItems;
+      
+      // Efeito visual quando há itens no carrinho
+      if (totalItems > 0) {
+        const cartIcon = document.querySelector('.cart-icon');
+        cartIcon.classList.add('pulse');
+        setTimeout(() => cartIcon.classList.remove('pulse'), 500);
+      }
+    }
+
+    // Scroll suave para o mapa
+    function scrollToMap() {
+      document.getElementById('storeMap').scrollIntoView({
+        behavior: 'smooth'
+      });
+    }
+
+    // Efeito de hover nos livros do autor do mês
+    const bookItems = document.querySelectorAll('.book-item');
+    bookItems.forEach(item => {
+      item.addEventListener('mouseenter', () => {
+        item.style.animation = 'none';
+        setTimeout(() => {
+          item.style.animation = 'float 4s ease-in-out infinite';
+        }, 10);
+      });
+    });
+
+    // Verifica se há itens no carrinho periodicamente (para caso de múltiplas abas)
+    setInterval(updateCartCounter, 1000);
+
+    // === [COLE AQUI O JAVASCRIPT DE CONTROLE DO SIDEBAR DE promocoes.html] ===
+    document.querySelector('.menu-icon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+
+    document.addEventListener("DOMContentLoaded", function() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      
+      if (user) {
+        header.innerHTML = `
+          <img src="${user.foto || 'user-default.png'}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="perfil.html">Meu Perfil</a>
+          <a href="pedidos.html">Meus Pedidos</a>
+          <a href="favoritos.html">Favoritos</a>
+          <button onclick="logout()">Sair</button>
+        `;
+      } else {
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+      }
+    });
+
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.querySelector('.menu-icon');
+      
+      if (!sidebar.contains(event.target) && event.target !== menuIcon) {
+        sidebar.classList.remove('open');
+      }
+    });
+    // === [FIM DO JAVASCRIPT] ===
+
+  </script>
 </body>
 </html>

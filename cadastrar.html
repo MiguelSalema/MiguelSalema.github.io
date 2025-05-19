@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <title>Cadastrar - Ler+</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      padding: 2rem;
+      background-color: #f4f4f4;
+      color: #0d47a1;
+    }
+    .form-container {
+      max-width: 400px;
+      margin: auto;
+      background: white;
+      padding: 2rem;
+      border-radius: 10px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.1);
+    }
+    .form-container h2 {
+      text-align: center;
+    }
+    .form-container input, .form-container button {
+      width: 100%;
+      padding: 0.75rem;
+      margin: 0.5rem 0;
+      border: 1px solid #ccc;
+      border-radius: 5px;
+    }
+    .form-container button {
+      background-color: #0d47a1;
+      color: white;
+      cursor: pointer;
+    }
+    .form-container button:hover {
+      background-color: #08306b;
+    }
+  </style>
+</head>
+<body>
+  <div class="form-container">
+    <h2>Cadastrar</h2>
+    <form onsubmit="event.preventDefault(); cadastrarUsuario();">
+      <input type="email" id="email" placeholder="Seu e-mail" required>
+      <input type="password" id="senha" placeholder="Senha" required>
+      <button type="submit">Cadastrar</button>
+    </form>
+  </div>
+
+  <script>
+    function cadastrarUsuario() {
+      const email = document.getElementById('email').value;
+      const senha = document.getElementById('senha').value;
+
+      const usuario = { email, senha };
+      localStorage.setItem("usuarioCadastrado", JSON.stringify(usuario));
+
+      alert("Cadastro realizado com sucesso!");
+      window.location.href = "entrar.html";
+    }
+  </script>
+</body>
+</html>

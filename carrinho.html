@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Seu Carrinho</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background-color: #f9f9f9;
+      color: #0d47a1;
+    }
+    .topbar {
+      background-color: #0d47a1;
+      color: white;
+      padding: 1rem 0;
+      text-align: center;
+      font-size: 0.9rem;
+    }
+    
+    /* Navbar atualizada - igual a promoções.html */
+    .navbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: white;
+      border-bottom: 2px solid #0d47a1;
+      padding: 1rem;
+      flex-wrap: wrap;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+    .navbar img {
+      width: 180px;
+      transition: transform 0.3s;
+    }
+    .navbar img:hover {
+      transform: scale(1.05);
+    }
+    .navbar nav {
+      display: flex;
+      gap: 1rem;
+      align-items: center;
+    }
+    .navbar nav a {
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      transition: all 0.3s;
+      padding: 0.5rem;
+      position: relative;
+    }
+    .navbar nav a::after {
+      content: '';
+      position: absolute;
+      width: 0;
+      height: 2px;
+      bottom: 0;
+      left: 0;
+      background-color: #08306b;
+      transition: width 0.3s;
+    }
+    .navbar nav a:hover {
+      color: #08306b;
+    }
+    .navbar nav a:hover::after {
+      width: 100%;
+    }
+    .dropdown {
+      position: relative;
+    }
+    .dropdown-content {
+      display: none;
+      position: absolute;
+      background-color: white;
+      min-width: 160px;
+      box-shadow: 0px 8px 16px rgba(0,0,0,0.2);
+      z-index: 1;
+      opacity: 0;
+      transform: translateY(-10px);
+      transition: all 0.3s ease-out;
+    }
+    .dropdown-content a {
+      display: block;
+      padding: 0.5rem;
+      color: #0d47a1;
+      text-decoration: none;
+      transition: all 0.2s;
+    }
+    .dropdown-content a:hover {
+      background-color: #e3f2fd;
+      padding-left: 20px;
+    }
+    .dropdown:hover .dropdown-content {
+      display: block;
+      opacity: 1;
+      transform: translateY(0);
+    }
+    .promo-button {
+      background-color: #0d47a1;
+      color: white !important;
+      padding: 0.4rem 0.8rem;
+      border-radius: 5px;
+      text-decoration: none;
+      transition: all 0.3s;
+    }
+    .promo-button:hover {
+      background-color: #08306b;
+      transform: translateY(-2px);
+    }
+    .cart-icon {
+      font-size: 1.2rem;
+      transition: transform 0.3s;
+      position: relative;
+    }
+    .cart-icon:hover {
+      transform: scale(1.2);
+    }
+    .cart-count {
+      position: absolute;
+      top: -8px;
+      right: -8px;
+      background-color: #c62828;
+      color: white;
+      border-radius: 50%;
+      width: 18px;
+      height: 18px;
+      font-size: 0.7rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .menu-icon {
+      font-size: 1.8rem;
+      cursor: pointer;
+      border: none;
+      background: none;
+      color: #0d47a1;
+      margin-left: 1rem;
+      transition: transform 0.3s;
+    }
+    .menu-icon:hover {
+      transform: scale(1.2);
+    }
+
+    /* Estilos do carrinho */
+    .container { 
+      max-width: 900px; 
+      margin: 2rem auto; 
+      background: white; 
+      padding: 2rem; 
+      border-radius: 8px; 
+      box-shadow: 0 0 10px rgba(0,0,0,0.1); 
+    }
+    h1, h2 { 
+      text-align: center; 
+    }
+    .item { 
+      display: flex; 
+      align-items: center; 
+      justify-content: space-between; 
+      padding: 1rem 0; 
+      border-bottom: 1px solid #ccc; 
+    }
+    .item img { 
+      width: 80px; 
+      border-radius: 5px; 
+      margin-right: 1rem; 
+    }
+    .item-info { 
+      display: flex; 
+      align-items: center; 
+    }
+    .item-details { 
+      display: flex; 
+      flex-direction: column; 
+    }
+    .remove { 
+      color: red; 
+      cursor: pointer; 
+      font-size: 0.9rem; 
+    }
+    .resumo { 
+      font-size: 1rem; 
+      text-align: right; 
+      margin-top: 1rem; 
+      line-height: 1.6; 
+    }
+    .formulario { 
+      margin-top: 2rem; 
+    }
+    .formulario input, 
+    .formulario select { 
+      width: 100%; 
+      padding: 0.6rem; 
+      margin-bottom: 1rem; 
+      border: 1px solid #ccc; 
+      border-radius: 4px; 
+    }
+    .formulario .duplo { 
+      display: flex; 
+      gap: 1rem; 
+    }
+    .formulario .duplo input { 
+      width: 100%; 
+    }
+    .finalizar, 
+    .limpar-carrinho { 
+      margin-top: 1rem; 
+      padding: 0.75rem 1.5rem; 
+      background-color: #0d47a1; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      width: 100%; 
+      transition: background-color 0.3s;
+    }
+    .finalizar:hover {
+      background-color: #08306b;
+    }
+    .limpar-carrinho { 
+      background-color: #c62828; 
+      margin-top: 0.5rem; 
+    }
+    .limpar-carrinho:hover {
+      background-color: #8e0000;
+    }
+    .cupom-area { 
+      margin-top: 1.5rem; 
+    }
+    .cupom-area input { 
+      width: calc(100% - 120px); 
+      display: inline-block; 
+      margin-right: 10px; 
+    }
+    .cupom-area button { 
+      padding: 0.6rem 1rem; 
+      background-color: #0d47a1; 
+      color: white; 
+      border: none; 
+      border-radius: 5px; 
+      cursor: pointer; 
+      transition: background-color 0.3s;
+    }
+    .cupom-area button:hover {
+      background-color: #08306b;
+    }
+
+    /* Sidebar styles */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      right: -300px;
+      width: 260px;
+      height: 100%;
+      background-color: white;
+      box-shadow: -2px 0 10px rgba(0,0,0,0.3);
+      padding: 1.5rem;
+      box-sizing: border-box;
+      z-index: 999;
+      transition: right 0.3s ease-in-out;
+    }
+    .sidebar.open {
+      right: 0;
+    }
+    .sidebar-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+    .sidebar-header img {
+      width: 80px;
+      height: 80px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-bottom: 0.5rem;
+      border: 2px solid #0d47a1;
+    }
+    .sidebar-header div {
+      font-size: 1.2rem;
+      color: #0d47a1;
+    }
+    .sidebar a, 
+    .sidebar button {
+      display: block;
+      width: 100%;
+      text-align: left;
+      padding: 0.75rem 0;
+      text-decoration: none;
+      color: #0d47a1;
+      font-weight: bold;
+      border: none;
+      background: none;
+      cursor: pointer;
+      border-bottom: 1px solid #ccc;
+    }
+    .sidebar button:hover, 
+    .sidebar a:hover {
+      background-color: #e3f2fd;
+    }
+
+    .footer {
+      background-color: #0d47a1;
+      color: white;
+      text-align: center;
+      padding: 1rem;
+    }
+
+    @media (max-width: 768px) {
+      .navbar nav {
+        display: none;
+        width: 100%;
+        flex-direction: column;
+        margin-top: 1rem;
+      }
+      .navbar nav.show {
+        display: flex;
+      }
+      .formulario .duplo {
+        flex-direction: column;
+      }
+      .cupom-area input {
+        width: 100%;
+        margin-bottom: 0.5rem;
+      }
+      .cupom-area button {
+        width: 100%;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="topbar">Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321</div>
+  
+  <div class="navbar">
+    <a href="index.html">
+      <img src="ler.png" alt="Logo Ler+">
+    </a>
+    <nav id="main-nav">
+      <a href="index.html">Início</a>
+      <a href="quem-somos.html">Quem Somos</a>
+      <div class="dropdown">
+        <a href="#">Gêneros ▾</a>
+        <div class="dropdown-content">
+          <a href="#">Fantasia</a>
+          <a href="#">Romance</a>
+          <a href="#">Ficção</a>
+          <a href="#">Terror</a>
+        </div>
+      </div>
+      <a href="promocoes.html" class="promo-button">Promoções</a>
+      <a href="carrinho.html" class="cart-icon">🛒 <span class="cart-count" id="cart-count">0</span></a>
+      <button class="menu-icon" id="menu-icon">☰</button>
+    </nav>
+  </div>
+
+  <!-- Sidebar -->
+  <div class="sidebar" id="sidebar">
+    <div class="sidebar-header" id="sidebar-header">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+    <div id="sidebar-links">
+      <!-- Conteúdo será preenchido por JS -->
+    </div>
+  </div>
+
+  <div class="container">
+    <h1>Itens no Carrinho</h1>
+    <div id="carrinho-itens"></div>
+    <div class="resumo" id="resumo-detalhado"></div>
+
+    <div class="cupom-area">
+      <input type="text" id="cupom" placeholder="Código de desconto (EX: LER10)">
+      <button onclick="aplicarCupom()">Aplicar</button>
+    </div>
+
+    <div class="formulario">
+      <h2>Finalizar Compra</h2>
+      <input type="text" id="nome" placeholder="Nome completo" required>
+      <input type="text" id="endereco" placeholder="Rua / Avenida" required>
+      <div class="duplo">
+        <input type="text" id="numero" placeholder="Número" required>
+        <input type="text" id="complemento" placeholder="Complemento">
+      </div>
+      <div class="duplo">
+        <input type="text" id="cep" placeholder="CEP" required>
+        <input type="text" id="cidade" placeholder="Cidade" required>
+      </div>
+      <select id="estado">
+        <option value="">Selecione o estado</option>
+        <option value="SP">SP</option>
+        <option value="RJ">RJ</option>
+        <option value="MG">MG</option>
+        <option value="ES">ES</option>
+        <option value="outros">Outro</option>
+      </select>
+      <button class="finalizar" onclick="finalizarCompra()">Finalizar Compra</button>
+      <button class="limpar-carrinho" onclick="limparCarrinho()">Limpar Carrinho</button>
+    </div>
+  </div>
+  <div class="footer">Rua Conde de Sardezas, 123 - São Paulo | (11) 98765-4321</div>
+
+  <script>
+    let desconto = 0;
+
+    function carregarCarrinho() {
+      const container = document.getElementById('carrinho-itens');
+      const resumo = document.getElementById('resumo-detalhado');
+      const carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      let subtotal = 0;
+      let frete = 0;
+
+      // Atualizar contador do carrinho
+      const cartCount = document.getElementById('cart-count');
+      const totalItems = carrinho.reduce((total, item) => total + item.quantidade, 0);
+      cartCount.textContent = totalItems;
+      cartCount.style.display = totalItems > 0 ? 'flex' : 'none';
+
+      container.innerHTML = '';
+      carrinho.forEach((item, index) => {
+        subtotal += item.preco * item.quantidade;
+        container.innerHTML += `
+          <div class="item">
+            <div class="item-info">
+              <img src="${item.imagem}" alt="${item.titulo}">
+              <div class="item-details">
+                <strong>${item.titulo}</strong>
+                <span>R$ ${item.preco.toFixed(2)} x ${item.quantidade}</span>
+                <span class="remove" onclick="removerItem(${index})">Remover</span>
+              </div>
+            </div>
+            <div><strong>R$ ${(item.preco * item.quantidade).toFixed(2)}</strong></div>
+          </div>`;
+      });
+
+      const estado = document.getElementById("estado")?.value || "";
+      if (estado === "SP") frete = 2;
+      else if (["RJ", "MG", "ES"].includes(estado)) frete = 6;
+      else if (estado) frete = 15;
+
+      const descontoValor = subtotal * desconto;
+      const total = subtotal - descontoValor + frete;
+
+      resumo.innerHTML = `
+        <p>Subtotal: R$ ${subtotal.toFixed(2)}</p>
+        <p>Desconto: R$ ${descontoValor.toFixed(2)}</p>
+        <p>Frete: R$ ${frete.toFixed(2)}</p>
+        <hr>
+        <p><strong>Total: R$ ${total.toFixed(2)}</strong></p>
+      `;
+    }
+
+    function removerItem(index) {
+      let carrinho = JSON.parse(localStorage.getItem('carrinho')) || [];
+      carrinho.splice(index, 1);
+      localStorage.setItem('carrinho', JSON.stringify(carrinho));
+      carregarCarrinho();
+    }
+
+    function limparCarrinho() {
+      localStorage.removeItem('carrinho');
+      carregarCarrinho();
+    }
+
+    function aplicarCupom() {
+      const cupom = document.getElementById("cupom").value.trim().toUpperCase();
+      if (cupom === "LER10") {
+        desconto = 0.10;
+        alert("Cupom aplicado: 10% de desconto!");
+      }if (cupom === "ESTUDANTEETECDS") {
+        desconto = 0.50;
+        alert("Cupom aplicado: 50% de desconto!");
+      }if (cupom === "RALM100") {
+        desconto = 1.0;
+        alert("Cupom aplicado: 100% DE DESCONTO!");
+      } else {
+        desconto = 0;
+        alert("Cupom inválido.");
+      }
+      carregarCarrinho();
+    }
+
+    function finalizarCompra() {
+      const nome = document.getElementById("nome").value;
+      const endereco = document.getElementById("endereco").value;
+      const numero = document.getElementById("numero").value;
+      const complemento = document.getElementById("complemento").value;
+      const cep = document.getElementById("cep").value;
+      const cidade = document.getElementById("cidade").value;
+      const estado = document.getElementById("estado").value;
+      if (!nome || !endereco || !numero || !cep || !cidade || !estado) {
+        alert("Por favor, preencha todos os campos obrigatórios para continuar.");
+        return;
+      }
+      const dados = {
+        nome, endereco, numero, complemento, cep, cidade, estado
+      };
+      localStorage.setItem('dadosEntrega', JSON.stringify(dados));
+      window.location.href = 'pagamento.html';
+    }
+
+    // Sidebar functionality
+    document.getElementById('menu-icon').addEventListener('click', function() {
+      document.getElementById('sidebar').classList.toggle('open');
+    });
+
+    function logout() {
+      localStorage.removeItem("usuario");
+      location.reload();
+    }
+
+    function loadSidebar() {
+      const user = JSON.parse(localStorage.getItem("usuario"));
+      const header = document.getElementById("sidebar-header");
+      const links = document.getElementById("sidebar-links");
+      
+      if (user) {
+        header.innerHTML = `
+          <img src="${user.foto || 'user-default.png'}" alt="Foto do usuário">
+          <div><strong>${user.nome}</strong></div>
+        `;
+        links.innerHTML = `
+          <a href="perfil.html">Meu Perfil</a>
+          <a href="pedidos.html">Meus Pedidos</a>
+          <a href="favoritos.html">Favoritos</a>
+          <button onclick="logout()">Sair</button>
+        `;
+      } else {
+        header.innerHTML = `<div style="margin-bottom: 1rem;"><strong>Bem-vindo!</strong></div>`;
+        links.innerHTML = `
+          <a href="entrar.html">Entrar</a>
+          <a href="cadastrar.html">Cadastrar</a>
+        `;
+      }
+    }
+
+    document.addEventListener('click', function(event) {
+      const sidebar = document.getElementById('sidebar');
+      const menuIcon = document.getElementById('menu-icon');
+      
+      if (!sidebar.contains(event.target) && event.target !== menuIcon) {
+        sidebar.classList.remove('open');
+      }
+    });
+
+    // Mobile menu toggle
+    document.getElementById('menu-icon').addEventListener('click', function(e) {
+      e.stopPropagation();
+      document.getElementById('main-nav').classList.toggle('show');
+    });
+
+    // Initialize
+    window.onload = function() {
+      carregarCarrinho();
+      loadSidebar();
+    };
+  </script>
+</body>
+</html>
